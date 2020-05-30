@@ -1,0 +1,19 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"package": "virtuoel.white_rabbit.mixin",
+	"compatibilityLevel": "JAVA_8",
+	"plugin": "virtuoel.white_rabbit.mixin.WhiteRabbitMixinConfigPlugin",
+	"mixins":
+	[
+		
+	],
+	"client":
+	[
+		
+	],
+	"injectors":
+	{
+		"defaultRequire": 1
+	}
+}

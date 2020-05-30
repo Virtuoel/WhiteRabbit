@@ -1,0 +1,41 @@
+{
+	"schemaVersion": 1,
+	"id": "white_rabbit",
+	"name": "White Rabbit",
+	"version": "${version}",
+	"description": "Fabric mod that adds consumables which can resize the player.",
+	"authors":
+	[
+		"Virtuoel"
+	],
+	"contact":
+	{
+		"homepage": "https://www.curseforge.com/minecraft/mc-mods/white_rabbit",
+		"issues": "https://github.com/Virtuoel/WhiteRabbit/issues",
+		"sources": "https://github.com/Virtuoel/WhiteRabbit"
+	},
+	"license": "MIT",
+	"icon": "assets/white_rabbit/icon.png",
+	"environment": "*",
+	"depends":
+	{
+		"fabricloader": ">=0.8.0",
+		"fabric-resource-loader-v0": "*",
+		"pehkui": "*"
+	},
+	"entrypoints":
+	{
+		"main":
+		[
+			"virtuoel.white_rabbit.WhiteRabbit"
+		],
+		"client":
+		[
+			"virtuoel.white_rabbit.WhiteRabbitClient"
+		]
+	},
+	"mixins":
+	[
+		"white_rabbit.mixins.json"
+	]
+}
