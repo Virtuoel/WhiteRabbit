@@ -1,0 +1,38 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients":
+	[
+		{
+			"item": "minecraft:sweet_berries"
+		},
+		{
+			"item": "minecraft:pumpkin_pie"
+		},
+		{
+			"item": "minecraft:apple"
+		},
+		{
+			"item": "minecraft:cooked_chicken"
+		},
+		{
+			"item": "minecraft:milk_bucket"
+		},
+		{
+			"item": "minecraft:bread"
+		},
+		{
+			"item": "minecraft:glass_bottle"
+		},
+		{
+			"item": "minecraft:glass_bottle"
+		},
+		{
+			"item": "minecraft:glass_bottle"
+		}
+	],
+	"result":
+	{
+		"item": "white_rabbit:pishsalver",
+		"count": 3
+	}
+}

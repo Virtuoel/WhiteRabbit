@@ -113,9 +113,9 @@ public class WhiteRabbit implements ModInitializer
 		{
 			final float target = targetSupplier.apply(entity, scaleData);
 			final float distance = scaleData.getInitialScale() - target;
-			final float progress = scaleData.getScale() - target;
+			final float remaining = scaleData.getScale() - target;
 			
-			return (int) (Math.abs(progress / distance) * delay);
+			return (int) (Math.abs(remaining / distance) * delay);
 		}
 		
 		return delay;

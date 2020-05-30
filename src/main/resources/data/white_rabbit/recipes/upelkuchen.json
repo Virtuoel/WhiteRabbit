@@ -1,0 +1,38 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients":
+	[
+		{
+			"item": "minecraft:sweet_berries"
+		},
+		{
+			"item": "minecraft:sugar"
+		},
+		{
+			"item": "minecraft:nether_wart"
+		},
+		{
+			"item": "minecraft:wheat"
+		},
+		{
+			"item": "minecraft:emerald"
+		},
+		{
+			"item": "minecraft:wheat"
+		},
+		{
+			"item": "minecraft:leather"
+		},
+		{
+			"item": "minecraft:cake"
+		},
+		{
+			"item": "minecraft:pufferfish"
+		}
+	],
+	"result":
+	{
+		"item": "white_rabbit:upelkuchen",
+		"count": 3
+	}
+}
