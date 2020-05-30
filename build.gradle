@@ -58,25 +58,25 @@ dependencies {
 	
 	if(project.hasProperty("fabric_modules")) {
 		project.fabric_modules.split(", ").each { String module ->
-			modCompileOnly "net.fabricmc.fabric-api:${module}", excludeLoader
+			modCompileOnly fabricApi.module(module, project.fabric_version), excludeLoader
 		}
 	}
 	
 	if(project.hasProperty("api_fabric_modules")) {
 		project.api_fabric_modules.split(", ").each { String module ->
-			modApi "net.fabricmc.fabric-api:${module}", excludeLoader
+			modApi fabricApi.module(module, project.fabric_version), excludeLoader
 		}
 	}
 	
 	if(project.hasProperty("impl_fabric_modules")) {
 		project.impl_fabric_modules.split(", ").each { String module ->
-			modImplementation "net.fabricmc.fabric-api:${module}", excludeLoader
+			modImplementation fabricApi.module(module, project.fabric_version), excludeLoader
 		}
 	}
 	
 	if(project.hasProperty("included_fabric_modules")) {
 		project.included_fabric_modules.split(", ").each { String module ->
-			include "net.fabricmc.fabric-api:${module}"
+			include fabricApi.module(module, project.fabric_version)
 		}
 	}
 	
