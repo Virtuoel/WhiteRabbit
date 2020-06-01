@@ -16,8 +16,6 @@ import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-import virtuoel.pehkui.util.ConfigHandler;
-
 public class JsonConfigHandler extends ConfigHandler<JsonObject>
 {
 	public JsonConfigHandler(String namespace, String path, Supplier<JsonObject> defaultConfig)

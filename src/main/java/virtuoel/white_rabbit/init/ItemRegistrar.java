@@ -1,6 +1,7 @@
 package virtuoel.white_rabbit.init;
 
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -28,7 +29,7 @@ public final class ItemRegistrar
 			.build();
 	}
 	
-	public static final ItemGroup ITEM_GROUP = FabricItemGroupBuilder.build(WhiteRabbit.id("item_group"), () -> new ItemStack(ItemRegistrar.PISHSALVER));
+	public static final ItemGroup ITEM_GROUP = !FabricLoader.getInstance().isModLoaded("fabric-item-groups-v0") ? null : FabricItemGroupBuilder.build(WhiteRabbit.id("item_group"), () -> new ItemStack(ItemRegistrar.PISHSALVER));
 	
 	public static final Item PISHSALVER = register(
 		"pishsalver",

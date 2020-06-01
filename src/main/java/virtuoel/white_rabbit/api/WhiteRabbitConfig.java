@@ -4,8 +4,8 @@ import java.util.function.Supplier;
 
 import com.google.gson.JsonObject;
 
-import virtuoel.pehkui.util.JsonConfigHandler;
 import virtuoel.white_rabbit.WhiteRabbit;
+import virtuoel.white_rabbit.util.JsonConfigHandler;
 
 public class WhiteRabbitConfig
 {
