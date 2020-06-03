@@ -34,14 +34,10 @@ public class ResizingItem extends Item
 		if (!world.isClient)
 		{
 			ScaleData scaleData = ScaleData.of(user);
-			float target = targetScale.apply(user, scaleData);
 			
-			if (Float.compare(target, scaleData.getScale()) != 0)
-			{
-				scaleData.setScaleTickDelay(delayTicks.apply(user, scaleData));
-				scaleData.setTargetScale(target);
-				scaleData.markForSync();
-			}
+			scaleData.setScaleTickDelay(delayTicks.apply(user, scaleData));
+			scaleData.setTargetScale(targetScale.apply(user, scaleData));
+			scaleData.markForSync();
 		}
 		
 		return stack;

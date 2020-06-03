@@ -73,7 +73,7 @@ public class WhiteRabbit implements ModInitializer
 	
 	public static boolean canShrink(LivingEntity entity, ScaleData scaleData)
 	{
-		return Float.compare(getShrinkTargetScale(entity, scaleData), getMinScale()) > 0;
+		return getShrinkTargetScale(entity, scaleData) >= getMinScale();
 	}
 	
 	public static float getMinScale()
@@ -115,7 +115,7 @@ public class WhiteRabbit implements ModInitializer
 	
 	public static boolean canGrow(LivingEntity entity, ScaleData scaleData)
 	{
-		return Float.compare(getGrowthTargetScale(entity, scaleData), getMaxScale()) < 0;
+		return getGrowthTargetScale(entity, scaleData) <= getMaxScale();
 	}
 	
 	public static float getMaxScale()
