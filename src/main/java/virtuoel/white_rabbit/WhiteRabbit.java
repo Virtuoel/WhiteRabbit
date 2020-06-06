@@ -41,9 +41,17 @@ public class WhiteRabbit implements ModInitializer
 	
 	public static int getShrinkDelayTicks(LivingEntity entity, ScaleData scaleData)
 	{
+		return getShrinkDelayTicks(
+			WhiteRabbit::getShrinkTargetScale,
+			entity, scaleData
+		);
+	}
+	
+	public static int getShrinkDelayTicks(BiFunction<LivingEntity, ScaleData, Float> targetSupplier, LivingEntity entity, ScaleData scaleData)
+	{
 		return getDelayTicks(
 			getShrinkDelayTicks(),
-			WhiteRabbit::getShrinkTargetScale,
+			targetSupplier,
 			entity, scaleData
 		);
 	}
@@ -65,7 +73,7 @@ public class WhiteRabbit implements ModInitializer
 	
 	public static boolean canShrink(LivingEntity entity, ScaleData scaleData)
 	{
-		return getShrinkTargetScale(entity, scaleData) > getMinScale() - Float.MIN_NORMAL;
+		return Float.compare(getShrinkTargetScale(entity, scaleData), getMinScale()) > 0;
 	}
 	
 	public static float getMinScale()
@@ -75,9 +83,17 @@ public class WhiteRabbit implements ModInitializer
 	
 	public static int getGrowthDelayTicks(LivingEntity entity, ScaleData scaleData)
 	{
+		return getGrowthDelayTicks(
+			WhiteRabbit::getGrowthTargetScale,
+			entity, scaleData
+		);
+	}
+	
+	public static int getGrowthDelayTicks(BiFunction<LivingEntity, ScaleData, Float> targetSupplier, LivingEntity entity, ScaleData scaleData)
+	{
 		return getDelayTicks(
 			getGrowthDelayTicks(),
-			WhiteRabbit::getGrowthTargetScale,
+			targetSupplier,
 			entity, scaleData
 		);
 	}
@@ -99,7 +115,7 @@ public class WhiteRabbit implements ModInitializer
 	
 	public static boolean canGrow(LivingEntity entity, ScaleData scaleData)
 	{
-		return getGrowthTargetScale(entity, scaleData) < getMaxScale() + Float.MIN_NORMAL;
+		return Float.compare(getGrowthTargetScale(entity, scaleData), getMaxScale()) < 0;
 	}
 	
 	public static float getMaxScale()
@@ -109,7 +125,7 @@ public class WhiteRabbit implements ModInitializer
 	
 	public static int getDelayTicks(int delay, BiFunction<LivingEntity, ScaleData, Float> targetSupplier, LivingEntity entity, ScaleData scaleData)
 	{
-		if (scaleData.getScale() != scaleData.getTargetScale())
+		if (Float.compare(scaleData.getScale(), scaleData.getTargetScale()) != 0)
 		{
 			final float target = targetSupplier.apply(entity, scaleData);
 			final float distance = scaleData.getInitialScale() - target;

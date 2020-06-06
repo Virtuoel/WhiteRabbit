@@ -54,9 +54,9 @@ public final class ItemRegistrar
 		)
 	);
 	
-	public static Item register(String name, Item item)
+	public static Item register(String name, Item entry)
 	{
-		return Registry.register(Registry.ITEM, WhiteRabbit.id(name), item);
+		return Registry.register(Registry.ITEM, WhiteRabbit.id(name), entry);
 	}
 	
 	public static final ItemRegistrar INSTANCE = new ItemRegistrar();
