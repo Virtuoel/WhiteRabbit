@@ -1,7 +1,7 @@
 package virtuoel.white_rabbit.item;
 
-import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,11 +14,11 @@ import virtuoel.pehkui.api.ScaleData;
 
 public class ResizingItem extends Item
 {
-	final BiFunction<LivingEntity, ScaleData, Float> targetScale;
-	final BiFunction<LivingEntity, ScaleData, Integer> delayTicks;
-	final BiPredicate<LivingEntity, ScaleData> useCondition;
+	final Function<ScaleData, Float> targetScale;
+	final Function<ScaleData, Integer> delayTicks;
+	final Predicate<ScaleData> useCondition;
 	
-	public ResizingItem(Item.Settings settings, BiFunction<LivingEntity, ScaleData, Float> targetScale, BiFunction<LivingEntity, ScaleData, Integer> delayTicks, BiPredicate<LivingEntity, ScaleData> useCondition)
+	public ResizingItem(Item.Settings settings, Function<ScaleData, Float> targetScale, Function<ScaleData, Integer> delayTicks, Predicate<ScaleData> useCondition)
 	{
 		super(settings);
 		this.targetScale = targetScale;
@@ -35,8 +35,8 @@ public class ResizingItem extends Item
 		{
 			ScaleData scaleData = ScaleData.of(user);
 			
-			scaleData.setScaleTickDelay(delayTicks.apply(user, scaleData));
-			scaleData.setTargetScale(targetScale.apply(user, scaleData));
+			scaleData.setScaleTickDelay(delayTicks.apply(scaleData));
+			scaleData.setTargetScale(targetScale.apply(scaleData));
 			scaleData.markForSync();
 		}
 		
@@ -46,7 +46,7 @@ public class ResizingItem extends Item
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
 	{
-		if (useCondition.test(user, ScaleData.of(user)))
+		if (useCondition.test(ScaleData.of(user)))
 		{
 			return super.use(world, user, hand);
 		}

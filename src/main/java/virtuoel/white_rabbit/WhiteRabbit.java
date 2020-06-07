@@ -1,7 +1,6 @@
 package virtuoel.white_rabbit;
 
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.apache.logging.log4j.LogManager;
@@ -11,7 +10,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import virtuoel.pehkui.api.ScaleData;
 import virtuoel.white_rabbit.api.WhiteRabbitConfig;
@@ -39,20 +37,20 @@ public class WhiteRabbit implements ModInitializer
 		return new Identifier(MOD_ID, name);
 	}
 	
-	public static int getShrinkDelayTicks(LivingEntity entity, ScaleData scaleData)
+	public static int getShrinkDelayTicks(ScaleData scaleData)
 	{
 		return getShrinkDelayTicks(
 			WhiteRabbit::getShrinkTargetScale,
-			entity, scaleData
+			scaleData
 		);
 	}
 	
-	public static int getShrinkDelayTicks(BiFunction<LivingEntity, ScaleData, Float> targetSupplier, LivingEntity entity, ScaleData scaleData)
+	public static int getShrinkDelayTicks(Function<ScaleData, Float> targetSupplier, ScaleData scaleData)
 	{
 		return getDelayTicks(
 			getShrinkDelayTicks(),
 			targetSupplier,
-			entity, scaleData
+			scaleData
 		);
 	}
 	
@@ -61,7 +59,7 @@ public class WhiteRabbit implements ModInitializer
 		return getConfigInt("shrinkDelayTicks", 100);
 	}
 	
-	public static float getShrinkTargetScale(LivingEntity entity, ScaleData scaleData)
+	public static float getShrinkTargetScale(ScaleData scaleData)
 	{
 		return scaleData.getTargetScale() * getShrinkMultiplier();
 	}
@@ -71,9 +69,9 @@ public class WhiteRabbit implements ModInitializer
 		return getConfigFloat("shrinkMultiplier", 0.5F);
 	}
 	
-	public static boolean canShrink(LivingEntity entity, ScaleData scaleData)
+	public static boolean canShrink(ScaleData scaleData)
 	{
-		return getShrinkTargetScale(entity, scaleData) >= getMinScale();
+		return getShrinkTargetScale(scaleData) >= getMinScale();
 	}
 	
 	public static float getMinScale()
@@ -81,20 +79,20 @@ public class WhiteRabbit implements ModInitializer
 		return getConfigFloat("minScale", 0.015625F);
 	}
 	
-	public static int getGrowthDelayTicks(LivingEntity entity, ScaleData scaleData)
+	public static int getGrowthDelayTicks(ScaleData scaleData)
 	{
 		return getGrowthDelayTicks(
 			WhiteRabbit::getGrowthTargetScale,
-			entity, scaleData
+			scaleData
 		);
 	}
 	
-	public static int getGrowthDelayTicks(BiFunction<LivingEntity, ScaleData, Float> targetSupplier, LivingEntity entity, ScaleData scaleData)
+	public static int getGrowthDelayTicks(Function<ScaleData, Float> targetSupplier, ScaleData scaleData)
 	{
 		return getDelayTicks(
 			getGrowthDelayTicks(),
 			targetSupplier,
-			entity, scaleData
+			scaleData
 		);
 	}
 	
@@ -103,7 +101,7 @@ public class WhiteRabbit implements ModInitializer
 		return getConfigInt("growthDelayTicks", 100);
 	}
 	
-	public static float getGrowthTargetScale(LivingEntity entity, ScaleData scaleData)
+	public static float getGrowthTargetScale(ScaleData scaleData)
 	{
 		return scaleData.getTargetScale() * getGrowthMultiplier();
 	}
@@ -113,9 +111,9 @@ public class WhiteRabbit implements ModInitializer
 		return getConfigFloat("growthMultiplier", 2.0F);
 	}
 	
-	public static boolean canGrow(LivingEntity entity, ScaleData scaleData)
+	public static boolean canGrow(ScaleData scaleData)
 	{
-		return getGrowthTargetScale(entity, scaleData) <= getMaxScale();
+		return getGrowthTargetScale(scaleData) <= getMaxScale();
 	}
 	
 	public static float getMaxScale()
@@ -123,11 +121,11 @@ public class WhiteRabbit implements ModInitializer
 		return getConfigFloat("maxScale", 16.0F);
 	}
 	
-	public static int getDelayTicks(int delay, BiFunction<LivingEntity, ScaleData, Float> targetSupplier, LivingEntity entity, ScaleData scaleData)
+	public static int getDelayTicks(int delay, Function<ScaleData, Float> targetSupplier, ScaleData scaleData)
 	{
 		if (Float.compare(scaleData.getScale(), scaleData.getTargetScale()) != 0)
 		{
-			final float target = targetSupplier.apply(entity, scaleData);
+			final float target = targetSupplier.apply(scaleData);
 			final float distance = scaleData.getInitialScale() - target;
 			final float remaining = scaleData.getScale() - target;
 			

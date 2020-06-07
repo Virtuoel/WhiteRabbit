@@ -1,7 +1,7 @@
 package virtuoel.white_rabbit.item;
 
-import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import net.minecraft.advancement.criterion.Criteria;
@@ -23,7 +23,7 @@ public class ResizingDrinkItem extends ResizingItem
 {
 	final Supplier<ItemStack> resultStack;
 	
-	public ResizingDrinkItem(Item.Settings settings, BiFunction<LivingEntity, ScaleData, Float> targetScale, BiFunction<LivingEntity, ScaleData, Integer> delayTicks, BiPredicate<LivingEntity, ScaleData> useCondition, Supplier<ItemStack> resultStack)
+	public ResizingDrinkItem(Item.Settings settings, Function<ScaleData, Float> targetScale, Function<ScaleData, Integer> delayTicks, Predicate<ScaleData> useCondition, Supplier<ItemStack> resultStack)
 	{
 		super(settings, targetScale, delayTicks, useCondition);
 		this.resultStack = resultStack;
@@ -82,7 +82,7 @@ public class ResizingDrinkItem extends ResizingItem
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
 	{
-		if (useCondition.test(user, ScaleData.of(user)))
+		if (useCondition.test(ScaleData.of(user)))
 		{
 			user.setCurrentHand(hand);
 			return TypedActionResult.success(user.getStackInHand(hand));
