@@ -33,5 +33,9 @@
 		[
 			"virtuoel.white_rabbit.WhiteRabbitClient"
 		]
-	}
+	},
+	"mixins":
+	[
+		"white_rabbit.mixins.json"
+	]
 }
