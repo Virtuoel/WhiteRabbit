@@ -1,5 +1,6 @@
 package virtuoel.white_rabbit;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -10,10 +11,21 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.block.DispenserBlock;
+import net.minecraft.block.dispenser.FallibleItemDispenserBehavior;
+import net.minecraft.block.dispenser.ItemDispenserBehavior;
+import net.minecraft.block.entity.DispenserBlockEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPointer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import virtuoel.pehkui.api.ScaleData;
 import virtuoel.white_rabbit.api.WhiteRabbitConfig;
 import virtuoel.white_rabbit.init.ItemRegistrar;
+import virtuoel.white_rabbit.mixin.DispenserBlockAccessor;
 
 public class WhiteRabbit implements ModInitializer
 {
@@ -30,6 +42,86 @@ public class WhiteRabbit implements ModInitializer
 	public void onInitialize()
 	{
 		ItemRegistrar.INSTANCE.getClass();
+		
+		DispenserBlock.registerBehavior(ItemRegistrar.PISHSALVER, new FallibleItemDispenserBehavior()
+		{
+			private final ItemDispenserBehavior ejectItem = new ItemDispenserBehavior();
+			
+			@Override
+			protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack)
+			{
+				final BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
+				final List<Entity> entities = pointer.getWorld().getEntities(null, new Box(pos));
+				
+				this.setSuccess(false);
+				for (final Entity target : entities)
+				{
+					final ScaleData scaleData = ScaleData.of(target);
+					
+					if (canShrink(scaleData))
+					{
+						scaleData.setScaleTickDelay(getShrinkDelayTicks(scaleData));
+						scaleData.setTargetScale(getShrinkTargetScale(scaleData));
+						scaleData.markForSync();
+						
+						this.setSuccess(true);
+						stack.decrement(1);
+						final ItemStack bottle = new ItemStack(Items.GLASS_BOTTLE);
+						
+						if (stack.isEmpty())
+						{
+							return bottle.copy();
+						}
+						else
+						{
+							if (((DispenserBlockEntity) pointer.getBlockEntity()).addToFirstFreeSlot(bottle.copy()) < 0)
+							{
+								final ItemStack result = DispenserBlockAccessor.getBehaviors().get(bottle.getItem()).dispense(pointer, bottle.copy());
+								
+								if (!result.isEmpty())
+								{
+									ejectItem.dispense(pointer, result);
+								}
+							}
+							
+							return stack;
+						}
+					}
+				}
+				
+				return stack;
+			}
+		});
+		
+		DispenserBlock.registerBehavior(ItemRegistrar.UPELKUCHEN, new FallibleItemDispenserBehavior()
+		{
+			@Override
+			protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack)
+			{
+				final BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
+				final List<Entity> entities = pointer.getWorld().getEntities(null, new Box(pos));
+				
+				this.setSuccess(false);
+				for (final Entity target : entities)
+				{
+					final ScaleData scaleData = ScaleData.of(target);
+					
+					if (canGrow(scaleData))
+					{
+						scaleData.setScaleTickDelay(getGrowthDelayTicks(scaleData));
+						scaleData.setTargetScale(getGrowthTargetScale(scaleData));
+						scaleData.markForSync();
+						
+						this.setSuccess(true);
+						stack.decrement(1);
+						
+						break;
+					}
+				}
+				
+				return stack;
+			}
+		});
 	}
 	
 	public static Identifier id(String name)

@@ -6,7 +6,8 @@
 	"plugin": "virtuoel.white_rabbit.mixin.WhiteRabbitMixinConfigPlugin",
 	"mixins":
 	[
-		
+		"DispenserBlockAccessor",
+		"ItemDispenserBehaviorInvoker"
 	],
 	"client":
 	[
