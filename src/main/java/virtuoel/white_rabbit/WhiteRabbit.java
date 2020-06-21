@@ -26,6 +26,7 @@ import virtuoel.pehkui.api.ScaleData;
 import virtuoel.white_rabbit.api.WhiteRabbitConfig;
 import virtuoel.white_rabbit.init.ItemRegistrar;
 import virtuoel.white_rabbit.mixin.DispenserBlockAccessor;
+import virtuoel.white_rabbit.mixin.FallibleItemDispenserBehaviorAccessor;
 
 public class WhiteRabbit implements ModInitializer
 {
@@ -53,7 +54,7 @@ public class WhiteRabbit implements ModInitializer
 				final BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
 				final List<Entity> entities = pointer.getWorld().getEntities(null, new Box(pos));
 				
-				this.setSuccess(false);
+				((FallibleItemDispenserBehaviorAccessor) (Object) this).setSuccess(false);
 				for (final Entity target : entities)
 				{
 					final ScaleData scaleData = ScaleData.of(target);
@@ -64,7 +65,7 @@ public class WhiteRabbit implements ModInitializer
 						scaleData.setTargetScale(getShrinkTargetScale(scaleData));
 						scaleData.markForSync();
 						
-						this.setSuccess(true);
+						((FallibleItemDispenserBehaviorAccessor) (Object) this).setSuccess(true);
 						stack.decrement(1);
 						final ItemStack bottle = new ItemStack(Items.GLASS_BOTTLE);
 						
@@ -101,7 +102,7 @@ public class WhiteRabbit implements ModInitializer
 				final BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
 				final List<Entity> entities = pointer.getWorld().getEntities(null, new Box(pos));
 				
-				this.setSuccess(false);
+				((FallibleItemDispenserBehaviorAccessor) (Object) this).setSuccess(false);
 				for (final Entity target : entities)
 				{
 					final ScaleData scaleData = ScaleData.of(target);
@@ -112,7 +113,7 @@ public class WhiteRabbit implements ModInitializer
 						scaleData.setTargetScale(getGrowthTargetScale(scaleData));
 						scaleData.markForSync();
 						
-						this.setSuccess(true);
+						((FallibleItemDispenserBehaviorAccessor) (Object) this).setSuccess(true);
 						stack.decrement(1);
 						
 						break;
