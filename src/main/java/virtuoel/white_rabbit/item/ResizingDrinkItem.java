@@ -13,6 +13,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
@@ -85,9 +86,9 @@ public class ResizingDrinkItem extends ResizingItem
 		if (useCondition.test(ScaleData.of(user)))
 		{
 			user.setCurrentHand(hand);
-			return TypedActionResult.success(user.getStackInHand(hand));
+			return new TypedActionResult<>(ActionResult.SUCCESS, user.getStackInHand(hand));
 		}
 		
-		return TypedActionResult.pass(user.getStackInHand(hand));
+		return new TypedActionResult<>(ActionResult.PASS, user.getStackInHand(hand));
 	}
 }
