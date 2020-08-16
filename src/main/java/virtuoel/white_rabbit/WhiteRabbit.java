@@ -23,6 +23,7 @@ import net.minecraft.util.math.BlockPointer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import virtuoel.pehkui.api.ScaleData;
+import virtuoel.pehkui.api.ScaleType;
 import virtuoel.white_rabbit.api.WhiteRabbitConfig;
 import virtuoel.white_rabbit.init.ItemRegistrar;
 import virtuoel.white_rabbit.mixin.DispenserBlockAccessor;
@@ -55,16 +56,42 @@ public class WhiteRabbit implements ModInitializer
 				final List<Entity> entities = pointer.getWorld().getEntities(null, new Box(pos));
 				
 				((FallibleItemDispenserBehaviorAccessor) (Object) this).setSuccess(false);
+				final boolean scaleBounds = getConfigBoolean("resizeBoundsOnly", false);
+				
 				for (final Entity target : entities)
 				{
-					final ScaleData scaleData = ScaleData.of(target);
+					boolean success = false;
 					
-					if (canShrink(scaleData))
+					if (scaleBounds)
 					{
-						scaleData.setScaleTickDelay(getShrinkDelayTicks(scaleData));
-						scaleData.setTargetScale(getShrinkTargetScale(scaleData));
-						scaleData.markForSync();
+						final ScaleData width = ScaleData.of(target, ScaleType.WIDTH);
+						final ScaleData height = ScaleData.of(target, ScaleType.HEIGHT);
 						
+						if (canShrink(width) && canShrink(height))
+						{
+							width.setScaleTickDelay(getShrinkDelayTicks(width));
+							width.setTargetScale(getShrinkTargetScale(width));
+							width.markForSync();
+							height.setScaleTickDelay(getShrinkDelayTicks(width));
+							height.setTargetScale(getShrinkTargetScale(width));
+							height.markForSync();
+							success = true;
+						}
+					}
+					else
+					{
+						final ScaleData scaleData = ScaleData.of(target);
+						if (canShrink(scaleData))
+						{
+							scaleData.setScaleTickDelay(getShrinkDelayTicks(scaleData));
+							scaleData.setTargetScale(getShrinkTargetScale(scaleData));
+							scaleData.markForSync();
+							success = true;
+						}
+					}
+					
+					if (success)
+					{
 						((FallibleItemDispenserBehaviorAccessor) (Object) this).setSuccess(true);
 						stack.decrement(1);
 						final ItemStack bottle = new ItemStack(Items.GLASS_BOTTLE);
@@ -103,16 +130,42 @@ public class WhiteRabbit implements ModInitializer
 				final List<Entity> entities = pointer.getWorld().getEntities(null, new Box(pos));
 				
 				((FallibleItemDispenserBehaviorAccessor) (Object) this).setSuccess(false);
+				final boolean scaleBounds = getConfigBoolean("resizeBoundsOnly", false);
+				
 				for (final Entity target : entities)
 				{
-					final ScaleData scaleData = ScaleData.of(target);
+					boolean success = false;
 					
-					if (canGrow(scaleData))
+					if (scaleBounds)
 					{
-						scaleData.setScaleTickDelay(getGrowthDelayTicks(scaleData));
-						scaleData.setTargetScale(getGrowthTargetScale(scaleData));
-						scaleData.markForSync();
+						final ScaleData width = ScaleData.of(target, ScaleType.WIDTH);
+						final ScaleData height = ScaleData.of(target, ScaleType.HEIGHT);
 						
+						if (canGrow(width) && canGrow(height))
+						{
+							width.setScaleTickDelay(getGrowthDelayTicks(width));
+							width.setTargetScale(getGrowthTargetScale(width));
+							width.markForSync();
+							height.setScaleTickDelay(getGrowthDelayTicks(width));
+							height.setTargetScale(getGrowthTargetScale(width));
+							height.markForSync();
+							success = true;
+						}
+					}
+					else
+					{
+						final ScaleData scaleData = ScaleData.of(target);
+						if (canGrow(scaleData))
+						{
+							scaleData.setScaleTickDelay(getGrowthDelayTicks(scaleData));
+							scaleData.setTargetScale(getGrowthTargetScale(scaleData));
+							scaleData.markForSync();
+							success = true;
+						}
+					}
+					
+					if (success)
+					{
 						((FallibleItemDispenserBehaviorAccessor) (Object) this).setSuccess(true);
 						stack.decrement(1);
 						
@@ -244,6 +297,14 @@ public class WhiteRabbit implements ModInitializer
 			.filter(JsonElement::isJsonPrimitive).map(JsonElement::getAsJsonPrimitive)
 			.filter(JsonPrimitive::isNumber).map(JsonPrimitive::getAsNumber)
 			.map(valueFunc)
+			.orElse(defaultValue);
+	}
+	
+	public static boolean getConfigBoolean(String name, boolean defaultValue)
+	{
+		return Optional.ofNullable(WhiteRabbitConfig.DATA.get(name))
+			.filter(JsonElement::isJsonPrimitive).map(JsonElement::getAsJsonPrimitive)
+			.filter(JsonPrimitive::isBoolean).map(JsonPrimitive::getAsBoolean)
 			.orElse(defaultValue);
 	}
 }

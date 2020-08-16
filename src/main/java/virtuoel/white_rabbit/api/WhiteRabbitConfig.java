@@ -22,6 +22,7 @@ public class WhiteRabbitConfig
 	{
 		final JsonObject config = new JsonObject();
 		
+		config.addProperty("resizeBoundsOnly", false);
 		config.addProperty("minScale", 0.015625F);
 		config.addProperty("maxScale", 16.0F);
 		config.addProperty("shrinkMultiplier", 0.5F);
