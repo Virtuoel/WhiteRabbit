@@ -53,7 +53,7 @@ public class WhiteRabbit implements ModInitializer
 			protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack)
 			{
 				final BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
-				final List<Entity> entities = pointer.getWorld().getEntities(null, new Box(pos));
+				final List<Entity> entities = pointer.getWorld().getOtherEntities(null, new Box(pos));
 				
 				((FallibleItemDispenserBehaviorAccessor) (Object) this).setSuccess(false);
 				final boolean scaleBounds = getConfigBoolean("resizeBoundsOnly", false);
@@ -127,7 +127,7 @@ public class WhiteRabbit implements ModInitializer
 			protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack)
 			{
 				final BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
-				final List<Entity> entities = pointer.getWorld().getEntities(null, new Box(pos));
+				final List<Entity> entities = pointer.getWorld().getOtherEntities(null, new Box(pos));
 				
 				((FallibleItemDispenserBehaviorAccessor) (Object) this).setSuccess(false);
 				final boolean scaleBounds = getConfigBoolean("resizeBoundsOnly", false);
