@@ -217,7 +217,7 @@ public class WhiteRabbit implements ModInitializer
 	
 	public static boolean canShrink(ScaleData scaleData)
 	{
-		return getShrinkTargetScale(scaleData) >= getMinScale();
+		return !isResizing(scaleData) && getShrinkTargetScale(scaleData) >= getMinScale();
 	}
 	
 	public static float getMinScale()
@@ -259,7 +259,7 @@ public class WhiteRabbit implements ModInitializer
 	
 	public static boolean canGrow(ScaleData scaleData)
 	{
-		return getGrowthTargetScale(scaleData) <= getMaxScale();
+		return !isResizing(scaleData) && getGrowthTargetScale(scaleData) <= getMaxScale();
 	}
 	
 	public static float getMaxScale()
@@ -279,6 +279,11 @@ public class WhiteRabbit implements ModInitializer
 		}
 		
 		return delay;
+	}
+	
+	public static boolean isResizing(ScaleData scaleData)
+	{
+		return Float.compare(scaleData.getBaseScale(), scaleData.getTargetScale()) != 0;
 	}
 	
 	public static float getConfigFloat(String name, float defaultValue)
