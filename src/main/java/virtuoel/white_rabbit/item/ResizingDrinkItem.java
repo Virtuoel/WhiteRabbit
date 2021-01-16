@@ -19,6 +19,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 import virtuoel.pehkui.api.ScaleData;
+import virtuoel.white_rabbit.mixin.PlayerEntityAccessor;
 
 public class ResizingDrinkItem extends ResizingItem
 {
@@ -46,20 +47,21 @@ public class ResizingDrinkItem extends ResizingItem
 		{
 			return resultStack.get();
 		}
-		else
+		else if (user instanceof PlayerEntity)
 		{
-			if (user instanceof PlayerEntity && !((PlayerEntity) user).abilities.creativeMode)
+			final PlayerEntityAccessor playerEntity = (PlayerEntityAccessor) user;
+			
+			if (!playerEntity.getAbilities().creativeMode)
 			{
-				ItemStack result = resultStack.get();
-				PlayerEntity playerEntity = (PlayerEntity) user;
-				if (!playerEntity.inventory.insertStack(result))
+				final ItemStack result = resultStack.get();
+				if (!playerEntity.getInventory().insertStack(result))
 				{
-					playerEntity.dropItem(result, false);
+					((PlayerEntity) user).dropItem(result, false);
 				}
 			}
-			
-			return stack;
 		}
+		
+		return stack;
 	}
 	
 	@Override
