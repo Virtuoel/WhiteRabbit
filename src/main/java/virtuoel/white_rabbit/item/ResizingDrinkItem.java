@@ -19,6 +19,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 import virtuoel.pehkui.api.ScaleData;
+import virtuoel.white_rabbit.init.ScaleTypeRegistrar;
 import virtuoel.white_rabbit.mixin.PlayerEntityAccessor;
 
 public class ResizingDrinkItem extends ResizingItem
@@ -85,7 +86,7 @@ public class ResizingDrinkItem extends ResizingItem
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
 	{
-		if (useCondition.test(ScaleData.of(user)))
+		if (useCondition.test(ScaleTypeRegistrar.FOOD_TYPE.getScaleData(user)))
 		{
 			user.setCurrentHand(hand);
 			return new TypedActionResult<>(ActionResult.SUCCESS, user.getStackInHand(hand));

@@ -12,6 +12,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import virtuoel.pehkui.api.ScaleData;
+import virtuoel.white_rabbit.init.ScaleTypeRegistrar;
 
 public class ResizingItem extends Item
 {
@@ -34,11 +35,10 @@ public class ResizingItem extends Item
 		
 		if (!world.isClient)
 		{
-			ScaleData scaleData = ScaleData.of(user);
+			final ScaleData scaleData = ScaleTypeRegistrar.FOOD_TYPE.getScaleData(user);
 			
 			scaleData.setScaleTickDelay(delayTicks.apply(scaleData));
 			scaleData.setTargetScale(targetScale.apply(scaleData));
-			scaleData.markForSync();
 		}
 		
 		return stack;
@@ -47,7 +47,7 @@ public class ResizingItem extends Item
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
 	{
-		if (useCondition.test(ScaleData.of(user)))
+		if (useCondition.test(ScaleTypeRegistrar.FOOD_TYPE.getScaleData(user)))
 		{
 			return super.use(world, user, hand);
 		}

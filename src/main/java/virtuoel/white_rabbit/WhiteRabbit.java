@@ -23,9 +23,9 @@ import net.minecraft.util.math.BlockPointer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import virtuoel.pehkui.api.ScaleData;
-import virtuoel.pehkui.api.ScaleType;
 import virtuoel.white_rabbit.api.WhiteRabbitConfig;
 import virtuoel.white_rabbit.init.ItemRegistrar;
+import virtuoel.white_rabbit.init.ScaleTypeRegistrar;
 import virtuoel.white_rabbit.mixin.DispenserBlockAccessor;
 import virtuoel.white_rabbit.mixin.FallibleItemDispenserBehaviorAccessor;
 
@@ -44,6 +44,7 @@ public class WhiteRabbit implements ModInitializer
 	public void onInitialize()
 	{
 		ItemRegistrar.INSTANCE.getClass();
+		ScaleTypeRegistrar.INSTANCE.getClass();
 		
 		DispenserBlock.registerBehavior(ItemRegistrar.PISHSALVER, new FallibleItemDispenserBehavior()
 		{
@@ -56,38 +57,17 @@ public class WhiteRabbit implements ModInitializer
 				final List<Entity> entities = pointer.getWorld().getOtherEntities(null, new Box(pos));
 				
 				((FallibleItemDispenserBehaviorAccessor) (Object) this).setSuccess(false);
-				final boolean scaleBounds = getConfigBoolean("resizeBoundsOnly", false);
 				
 				for (final Entity target : entities)
 				{
 					boolean success = false;
 					
-					if (scaleBounds)
+					final ScaleData scaleData = ScaleTypeRegistrar.FOOD_TYPE.getScaleData(target);
+					if (canShrink(scaleData))
 					{
-						final ScaleData width = ScaleData.of(target, ScaleType.WIDTH);
-						final ScaleData height = ScaleData.of(target, ScaleType.HEIGHT);
-						
-						if (canShrink(width) && canShrink(height))
-						{
-							width.setScaleTickDelay(getShrinkDelayTicks(width));
-							width.setTargetScale(getShrinkTargetScale(width));
-							width.markForSync();
-							height.setScaleTickDelay(getShrinkDelayTicks(width));
-							height.setTargetScale(getShrinkTargetScale(width));
-							height.markForSync();
-							success = true;
-						}
-					}
-					else
-					{
-						final ScaleData scaleData = ScaleData.of(target);
-						if (canShrink(scaleData))
-						{
-							scaleData.setScaleTickDelay(getShrinkDelayTicks(scaleData));
-							scaleData.setTargetScale(getShrinkTargetScale(scaleData));
-							scaleData.markForSync();
-							success = true;
-						}
+						scaleData.setScaleTickDelay(getShrinkDelayTicks(scaleData));
+						scaleData.setTargetScale(getShrinkTargetScale(scaleData));
+						success = true;
 					}
 					
 					if (success)
@@ -130,38 +110,17 @@ public class WhiteRabbit implements ModInitializer
 				final List<Entity> entities = pointer.getWorld().getOtherEntities(null, new Box(pos));
 				
 				((FallibleItemDispenserBehaviorAccessor) (Object) this).setSuccess(false);
-				final boolean scaleBounds = getConfigBoolean("resizeBoundsOnly", false);
 				
 				for (final Entity target : entities)
 				{
 					boolean success = false;
 					
-					if (scaleBounds)
+					final ScaleData scaleData = ScaleTypeRegistrar.FOOD_TYPE.getScaleData(target);
+					if (canGrow(scaleData))
 					{
-						final ScaleData width = ScaleData.of(target, ScaleType.WIDTH);
-						final ScaleData height = ScaleData.of(target, ScaleType.HEIGHT);
-						
-						if (canGrow(width) && canGrow(height))
-						{
-							width.setScaleTickDelay(getGrowthDelayTicks(width));
-							width.setTargetScale(getGrowthTargetScale(width));
-							width.markForSync();
-							height.setScaleTickDelay(getGrowthDelayTicks(width));
-							height.setTargetScale(getGrowthTargetScale(width));
-							height.markForSync();
-							success = true;
-						}
-					}
-					else
-					{
-						final ScaleData scaleData = ScaleData.of(target);
-						if (canGrow(scaleData))
-						{
-							scaleData.setScaleTickDelay(getGrowthDelayTicks(scaleData));
-							scaleData.setTargetScale(getGrowthTargetScale(scaleData));
-							scaleData.markForSync();
-							success = true;
-						}
+						scaleData.setScaleTickDelay(getGrowthDelayTicks(scaleData));
+						scaleData.setTargetScale(getGrowthTargetScale(scaleData));
+						success = true;
 					}
 					
 					if (success)
