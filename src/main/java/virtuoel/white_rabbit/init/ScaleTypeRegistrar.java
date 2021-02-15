@@ -6,6 +6,7 @@ import virtuoel.pehkui.api.ScaleModifier;
 import virtuoel.pehkui.api.ScaleRegistries;
 import virtuoel.pehkui.api.ScaleType;
 import virtuoel.white_rabbit.WhiteRabbit;
+import virtuoel.white_rabbit.mixin.EntityAccessor;
 
 public class ScaleTypeRegistrar
 {
@@ -48,7 +49,12 @@ public class ScaleTypeRegistrar
 			
 			if (e != null)
 			{
+				final EntityAccessor en = (EntityAccessor) e;
+				final boolean onGround = en.getOnGround();
+				
 				e.calculateDimensions();
+				
+				en.setOnGround(onGround);
 				
 				ScaleData data;
 				for (ScaleType scaleType : ScaleRegistries.SCALE_TYPES.values())
