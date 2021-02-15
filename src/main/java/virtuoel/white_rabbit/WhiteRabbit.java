@@ -65,7 +65,13 @@ public class WhiteRabbit implements ModInitializer
 					final ScaleData scaleData = ScaleTypeRegistrar.FOOD_TYPE.getScaleData(target);
 					if (canShrink(scaleData))
 					{
-						scaleData.setScaleTickDelay(getShrinkDelayTicks(scaleData));
+						final int delay = getShrinkDelayTicks(scaleData);
+						
+						if (delay >= 0)
+						{
+							scaleData.setScaleTickDelay(delay);
+						}
+						
 						scaleData.setTargetScale(getShrinkTargetScale(scaleData));
 						success = true;
 					}
@@ -118,7 +124,13 @@ public class WhiteRabbit implements ModInitializer
 					final ScaleData scaleData = ScaleTypeRegistrar.FOOD_TYPE.getScaleData(target);
 					if (canGrow(scaleData))
 					{
-						scaleData.setScaleTickDelay(getGrowthDelayTicks(scaleData));
+						final int delay = getGrowthDelayTicks(scaleData);
+						
+						if (delay >= 0)
+						{
+							scaleData.setScaleTickDelay(delay);
+						}
+						
 						scaleData.setTargetScale(getGrowthTargetScale(scaleData));
 						success = true;
 					}

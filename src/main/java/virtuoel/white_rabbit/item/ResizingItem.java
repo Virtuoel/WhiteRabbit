@@ -37,7 +37,13 @@ public class ResizingItem extends Item
 		{
 			final ScaleData scaleData = ScaleTypeRegistrar.FOOD_TYPE.getScaleData(user);
 			
-			scaleData.setScaleTickDelay(delayTicks.apply(scaleData));
+			final int delay = delayTicks.apply(scaleData);
+			
+			if (delay >= 0)
+			{
+				scaleData.setScaleTickDelay(delay);
+			}
+			
 			scaleData.setTargetScale(targetScale.apply(scaleData));
 		}
 		
