@@ -14,6 +14,7 @@ import net.fabricmc.api.ModInitializer;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.FallibleItemDispenserBehavior;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.DispenserBlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -53,8 +54,9 @@ public class WhiteRabbit implements ModInitializer
 			@Override
 			protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack)
 			{
+				final BlockEntity blockEntity = pointer.getBlockEntity();
 				final BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
-				final List<Entity> entities = pointer.getWorld().getOtherEntities(null, new Box(pos));
+				final List<Entity> entities = blockEntity.getWorld().getOtherEntities(null, new Box(pos));
 				
 				((FallibleItemDispenserBehaviorAccessor) (Object) this).setSuccess(false);
 				
@@ -88,7 +90,7 @@ public class WhiteRabbit implements ModInitializer
 						}
 						else
 						{
-							if (((DispenserBlockEntity) pointer.getBlockEntity()).addToFirstFreeSlot(bottle.copy()) < 0)
+							if (((DispenserBlockEntity) blockEntity).addToFirstFreeSlot(bottle.copy()) < 0)
 							{
 								final ItemStack result = DispenserBlockAccessor.getBehaviors().get(bottle.getItem()).dispense(pointer, bottle.copy());
 								
@@ -98,7 +100,7 @@ public class WhiteRabbit implements ModInitializer
 								}
 							}
 							
-							return stack;
+							break;
 						}
 					}
 				}
@@ -113,7 +115,7 @@ public class WhiteRabbit implements ModInitializer
 			protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack)
 			{
 				final BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
-				final List<Entity> entities = pointer.getWorld().getOtherEntities(null, new Box(pos));
+				final List<Entity> entities = pointer.getBlockEntity().getWorld().getOtherEntities(null, new Box(pos));
 				
 				((FallibleItemDispenserBehaviorAccessor) (Object) this).setSuccess(false);
 				
