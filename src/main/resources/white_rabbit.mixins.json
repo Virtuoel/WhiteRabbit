@@ -6,7 +6,6 @@
 	"mixins":
 	[
 		"DispenserBlockAccessor",
-		"EntityAccessor",
 		"FallibleItemDispenserBehaviorAccessor",
 		"ItemDispenserBehaviorInvoker",
 		"PlayerEntityAccessor"

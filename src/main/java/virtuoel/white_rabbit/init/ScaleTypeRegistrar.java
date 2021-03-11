@@ -1,12 +1,10 @@
 package virtuoel.white_rabbit.init;
 
-import net.minecraft.entity.Entity;
 import virtuoel.pehkui.api.ScaleData;
 import virtuoel.pehkui.api.ScaleModifier;
 import virtuoel.pehkui.api.ScaleRegistries;
 import virtuoel.pehkui.api.ScaleType;
 import virtuoel.white_rabbit.WhiteRabbit;
-import virtuoel.white_rabbit.mixin.EntityAccessor;
 
 public class ScaleTypeRegistrar
 {
@@ -30,7 +28,10 @@ public class ScaleTypeRegistrar
 		final ScaleType type = ScaleRegistries.register(
 			ScaleRegistries.SCALE_TYPES,
 			WhiteRabbit.id("food"),
-			ScaleType.Builder.create().build()
+			ScaleType.Builder.create()
+				.affectsDimensions()
+				.addDependentModifier(FOOD_MODIFIER)
+				.build()
 		);
 		
 		if (WhiteRabbit.getConfigBoolean("resizeBoundsOnly", false))
@@ -42,32 +43,6 @@ public class ScaleTypeRegistrar
 		{
 			ScaleType.BASE.getDefaultBaseValueModifiers().add(FOOD_MODIFIER);
 		}
-		
-		type.getScaleChangedEvent().register(s ->
-		{
-			final Entity e = s.getEntity();
-			
-			if (e != null)
-			{
-				final EntityAccessor en = (EntityAccessor) e;
-				final boolean onGround = en.getOnGround();
-				
-				e.calculateDimensions();
-				
-				en.setOnGround(onGround);
-				
-				ScaleData data;
-				for (ScaleType scaleType : ScaleRegistries.SCALE_TYPES.values())
-				{
-					data = scaleType.getScaleData(e);
-					
-					if (data.getBaseValueModifiers().contains(FOOD_MODIFIER))
-					{
-						data.markForSync(true);
-					}
-				}
-			}
-		});
 		
 		return type;
 	}
