@@ -98,11 +98,11 @@ dependencies {
 	}
 	
 	if(project.hasProperty("pehkui_version")) {
-		include modImplementation("virtuoel:Pehkui:${pehkui_version}", excludeFabric)
+		modImplementation("virtuoel:Pehkui:${pehkui_version}", excludeFabric)
 	}
 	
 	if(project.hasProperty("pehkui_tag")) {
-		include modImplementation("com.github.Virtuoel:Pehkui:${pehkui_tag}", excludeFabric)
+		modImplementation("com.github.Virtuoel:Pehkui:${pehkui_tag}", excludeFabric)
 	}
 }
 
