@@ -151,9 +151,14 @@ public class WhiteRabbit implements ModInitializer
 		});
 	}
 	
-	public static Identifier id(String name)
+	public static Identifier id(String path)
 	{
-		return new Identifier(MOD_ID, name);
+		return new Identifier(MOD_ID, path);
+	}
+	
+	public static Identifier id(String path, String... paths)
+	{
+		return id(paths.length == 0 ? path : path + String.join("/", paths));
 	}
 	
 	public static int getShrinkDelayTicks(ScaleData scaleData)
