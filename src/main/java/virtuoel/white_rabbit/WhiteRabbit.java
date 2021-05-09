@@ -1,14 +1,10 @@
 package virtuoel.white_rabbit;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
 
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.block.DispenserBlock;
@@ -38,7 +34,7 @@ public class WhiteRabbit implements ModInitializer
 	
 	public WhiteRabbit()
 	{
-		WhiteRabbitConfig.DATA.getClass();
+		WhiteRabbitConfig.COMMON.getClass();
 	}
 	
 	@Override
@@ -163,86 +159,40 @@ public class WhiteRabbit implements ModInitializer
 	
 	public static int getShrinkDelayTicks(ScaleData scaleData)
 	{
-		return getShrinkDelayTicks(
+		return getDelayTicks(
+			WhiteRabbitConfig.COMMON.shrinkDelayTicks.get(),
 			WhiteRabbit::getShrinkTargetScale,
 			scaleData
 		);
 	}
 	
-	public static int getShrinkDelayTicks(Function<ScaleData, Float> targetSupplier, ScaleData scaleData)
-	{
-		return getDelayTicks(
-			getShrinkDelayTicks(),
-			targetSupplier,
-			scaleData
-		);
-	}
-	
-	public static int getShrinkDelayTicks()
-	{
-		return getConfigInt("shrinkDelayTicks", 100);
-	}
-	
 	public static float getShrinkTargetScale(ScaleData scaleData)
 	{
-		return scaleData.getTargetScale() * getShrinkMultiplier();
-	}
-	
-	public static float getShrinkMultiplier()
-	{
-		return getConfigFloat("shrinkMultiplier", 0.5F);
+		return (float) (scaleData.getTargetScale() * WhiteRabbitConfig.COMMON.shrinkMultiplier.get());
 	}
 	
 	public static boolean canShrink(ScaleData scaleData)
 	{
-		return !isResizing(scaleData) && getShrinkTargetScale(scaleData) >= getMinScale();
-	}
-	
-	public static float getMinScale()
-	{
-		return getConfigFloat("minScale", 0.015625F);
+		return !isResizing(scaleData) && getShrinkTargetScale(scaleData) >= WhiteRabbitConfig.COMMON.minScale.get();
 	}
 	
 	public static int getGrowthDelayTicks(ScaleData scaleData)
 	{
-		return getGrowthDelayTicks(
+		return getDelayTicks(
+			WhiteRabbitConfig.COMMON.growthDelayTicks.get(),
 			WhiteRabbit::getGrowthTargetScale,
 			scaleData
 		);
 	}
 	
-	public static int getGrowthDelayTicks(Function<ScaleData, Float> targetSupplier, ScaleData scaleData)
-	{
-		return getDelayTicks(
-			getGrowthDelayTicks(),
-			targetSupplier,
-			scaleData
-		);
-	}
-	
-	public static int getGrowthDelayTicks()
-	{
-		return getConfigInt("growthDelayTicks", 100);
-	}
-	
 	public static float getGrowthTargetScale(ScaleData scaleData)
 	{
-		return scaleData.getTargetScale() * getGrowthMultiplier();
-	}
-	
-	public static float getGrowthMultiplier()
-	{
-		return getConfigFloat("growthMultiplier", 2.0F);
+		return (float) (scaleData.getTargetScale() * WhiteRabbitConfig.COMMON.growthMultiplier.get());
 	}
 	
 	public static boolean canGrow(ScaleData scaleData)
 	{
-		return !isResizing(scaleData) && getGrowthTargetScale(scaleData) <= getMaxScale();
-	}
-	
-	public static float getMaxScale()
-	{
-		return getConfigFloat("maxScale", 16.0F);
+		return !isResizing(scaleData) && getGrowthTargetScale(scaleData) <= WhiteRabbitConfig.COMMON.maxScale.get();
 	}
 	
 	public static int getDelayTicks(int delay, Function<ScaleData, Float> targetSupplier, ScaleData scaleData)
@@ -262,32 +212,5 @@ public class WhiteRabbit implements ModInitializer
 	public static boolean isResizing(ScaleData scaleData)
 	{
 		return Float.compare(scaleData.getBaseScale(), scaleData.getTargetScale()) != 0;
-	}
-	
-	public static float getConfigFloat(String name, float defaultValue)
-	{
-		return getConfigNumber(name, Number::floatValue, defaultValue);
-	}
-	
-	public static int getConfigInt(String name, int defaultValue)
-	{
-		return getConfigNumber(name, Number::intValue, defaultValue);
-	}
-	
-	public static <T> T getConfigNumber(String name, Function<Number, T> valueFunc, T defaultValue)
-	{
-		return Optional.ofNullable(WhiteRabbitConfig.DATA.get(name))
-			.filter(JsonElement::isJsonPrimitive).map(JsonElement::getAsJsonPrimitive)
-			.filter(JsonPrimitive::isNumber).map(JsonPrimitive::getAsNumber)
-			.map(valueFunc)
-			.orElse(defaultValue);
-	}
-	
-	public static boolean getConfigBoolean(String name, boolean defaultValue)
-	{
-		return Optional.ofNullable(WhiteRabbitConfig.DATA.get(name))
-			.filter(JsonElement::isJsonPrimitive).map(JsonElement::getAsJsonPrimitive)
-			.filter(JsonPrimitive::isBoolean).map(JsonPrimitive::getAsBoolean)
-			.orElse(defaultValue);
 	}
 }

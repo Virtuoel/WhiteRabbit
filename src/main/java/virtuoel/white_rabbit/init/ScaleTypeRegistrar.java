@@ -5,6 +5,7 @@ import virtuoel.pehkui.api.ScaleModifier;
 import virtuoel.pehkui.api.ScaleRegistries;
 import virtuoel.pehkui.api.ScaleType;
 import virtuoel.white_rabbit.WhiteRabbit;
+import virtuoel.white_rabbit.api.WhiteRabbitConfig;
 
 public class ScaleTypeRegistrar
 {
@@ -34,7 +35,7 @@ public class ScaleTypeRegistrar
 				.build()
 		);
 		
-		if (WhiteRabbit.getConfigBoolean("resizeBoundsOnly", false))
+		if (WhiteRabbitConfig.COMMON.resizeBoundsOnly.get())
 		{
 			ScaleType.WIDTH.getDefaultBaseValueModifiers().add(FOOD_MODIFIER);
 			ScaleType.HEIGHT.getDefaultBaseValueModifiers().add(FOOD_MODIFIER);
