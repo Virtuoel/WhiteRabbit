@@ -1,9 +1,9 @@
 package virtuoel.white_rabbit.init;
 
-import virtuoel.pehkui.api.ScaleData;
 import virtuoel.pehkui.api.ScaleModifier;
 import virtuoel.pehkui.api.ScaleRegistries;
 import virtuoel.pehkui.api.ScaleType;
+import virtuoel.pehkui.api.TypedScaleModifier;
 import virtuoel.white_rabbit.WhiteRabbit;
 import virtuoel.white_rabbit.api.WhiteRabbitConfig;
 
@@ -12,14 +12,7 @@ public class ScaleTypeRegistrar
 	public static final ScaleModifier FOOD_MODIFIER = ScaleRegistries.register(
 		ScaleRegistries.SCALE_MODIFIERS,
 		WhiteRabbit.id("food_multiplier"),
-		new ScaleModifier()
-		{
-			@Override
-			public float modifyScale(final ScaleData scaleData, float modifiedScale, final float delta)
-			{
-				return ScaleTypeRegistrar.FOOD_TYPE.getScaleData(scaleData.getEntity()).getScale(delta) * modifiedScale;
-			}
-		}
+		new TypedScaleModifier(() -> ScaleTypeRegistrar.FOOD_TYPE)
 	);
 	
 	public static final ScaleType FOOD_TYPE = registerFoodType();
