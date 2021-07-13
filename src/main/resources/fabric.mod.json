@@ -3,7 +3,7 @@
 	"id": "white_rabbit",
 	"name": "White Rabbit",
 	"version": "${version}",
-	"description": "Fabric mod that adds consumables which can resize the player.",
+	"description": "Adds consumables which can resize the player.",
 	"authors":
 	[
 		"Virtuoel"
@@ -21,7 +21,7 @@
 	{
 		"fabricloader": ">=0.8.0",
 		"fabric-resource-loader-v0": "*",
-		"pehkui": ">=2.1.0"
+		"pehkui": ">=2.3.0"
 	},
 	"entrypoints":
 	{

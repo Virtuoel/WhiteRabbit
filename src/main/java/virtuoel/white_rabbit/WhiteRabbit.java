@@ -34,7 +34,7 @@ public class WhiteRabbit implements ModInitializer
 	
 	public WhiteRabbit()
 	{
-		WhiteRabbitConfig.COMMON.getClass();
+		WhiteRabbitConfig.BUILDER.config.get();
 	}
 	
 	@Override
@@ -154,7 +154,7 @@ public class WhiteRabbit implements ModInitializer
 	
 	public static Identifier id(String path, String... paths)
 	{
-		return id(paths.length == 0 ? path : path + String.join("/", paths));
+		return id(paths.length == 0 ? path : path + "/" + String.join("/", paths));
 	}
 	
 	public static int getShrinkDelayTicks(ScaleData scaleData)
