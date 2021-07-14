@@ -6,7 +6,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 import com.google.gson.JsonObject;
 
-import virtuoel.pehkui.util.JsonConfigBuilder;
+import virtuoel.kanos_config.api.JsonConfigBuilder;
 import virtuoel.white_rabbit.WhiteRabbit;
 
 public class WhiteRabbitConfig
