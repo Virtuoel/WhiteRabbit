@@ -51,7 +51,7 @@ public class WhiteRabbit implements ModInitializer
 			protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack)
 			{
 				final BlockEntity blockEntity = pointer.getBlockEntity();
-				final BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
+				final BlockPos pos = pointer.getPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
 				final List<Entity> entities = blockEntity.getWorld().getOtherEntities(null, new Box(pos));
 				
 				((FallibleItemDispenserBehaviorAccessor) (Object) this).setSuccess(false);
@@ -110,7 +110,7 @@ public class WhiteRabbit implements ModInitializer
 			@Override
 			protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack)
 			{
-				final BlockPos pos = pointer.getBlockPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
+				final BlockPos pos = pointer.getPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
 				final List<Entity> entities = pointer.getBlockEntity().getWorld().getOtherEntities(null, new Box(pos));
 				
 				((FallibleItemDispenserBehaviorAccessor) (Object) this).setSuccess(false);
