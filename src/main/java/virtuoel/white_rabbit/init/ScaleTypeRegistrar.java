@@ -3,6 +3,7 @@ package virtuoel.white_rabbit.init;
 import virtuoel.pehkui.api.ScaleModifier;
 import virtuoel.pehkui.api.ScaleRegistries;
 import virtuoel.pehkui.api.ScaleType;
+import virtuoel.pehkui.api.ScaleTypes;
 import virtuoel.pehkui.api.TypedScaleModifier;
 import virtuoel.white_rabbit.WhiteRabbit;
 import virtuoel.white_rabbit.api.WhiteRabbitConfig;
@@ -30,12 +31,12 @@ public class ScaleTypeRegistrar
 		
 		if (WhiteRabbitConfig.COMMON.resizeBoundsOnly.get())
 		{
-			ScaleType.WIDTH.getDefaultBaseValueModifiers().add(FOOD_MODIFIER);
-			ScaleType.HEIGHT.getDefaultBaseValueModifiers().add(FOOD_MODIFIER);
+			ScaleTypes.WIDTH.getDefaultBaseValueModifiers().add(FOOD_MODIFIER);
+			ScaleTypes.HEIGHT.getDefaultBaseValueModifiers().add(FOOD_MODIFIER);
 		}
 		else
 		{
-			ScaleType.BASE.getDefaultBaseValueModifiers().add(FOOD_MODIFIER);
+			ScaleTypes.BASE.getDefaultBaseValueModifiers().add(FOOD_MODIFIER);
 		}
 		
 		return type;
