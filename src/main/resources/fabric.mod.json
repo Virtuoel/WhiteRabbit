@@ -20,8 +20,8 @@
 	"depends":
 	{
 		"fabricloader": ">=0.12.5",
-		"fabric-resource-loader-v0": "*",
-		"pehkui": ">=2.5.2"
+		"pehkui": ">=2.6.0",
+		"fabric-resource-loader-v0": "*"
 	},
 	"entrypoints":
 	{
