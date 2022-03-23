@@ -153,6 +153,10 @@ processResources {
 	filesMatching("fabric.mod.json") {
 		expand "version": project.version
 	}
+	
+	filesMatching("META-INF/mods.toml") {
+		expand "file": [ jarVersion: project.version ]
+	}
 }
 
 def proj = project
@@ -184,6 +188,10 @@ tasks.withType(AbstractArchiveTask) {
 	reproducibleFileOrder = true
 }
 
+java {
+	withSourcesJar()
+}
+
 jar {
 	from "LICENSE"
 	manifest
@@ -196,9 +204,7 @@ jar {
 	}
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-	classifier = "sources"
-	from sourceSets.main.allSource
+tasks.named("sourcesJar") {
 	exclude "fabric.mod.json"
 	exclude "META-INF/mods.toml"
 	manifest
@@ -488,4 +494,9 @@ modrinth {
 		uploadFile = remapJar
 		additionalFiles = files("${project.buildDir}/libs/${archivesBaseName}-${version}-sources.jar").files
 	}
+}
+
+tasks.named("modrinth") {
+	dependsOn remapJar
+	dependsOn remapSourcesJar
 }
