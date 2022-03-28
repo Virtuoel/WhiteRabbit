@@ -24,6 +24,7 @@ public class ScaleTypeRegistrar
 			ScaleRegistries.SCALE_TYPES,
 			WhiteRabbit.id("food"),
 			ScaleType.Builder.create()
+				.defaultTickDelay(100)
 				.affectsDimensions()
 				.addDependentModifier(FOOD_MODIFIER)
 				.build()
