@@ -197,11 +197,11 @@ public class WhiteRabbit implements ModInitializer
 	
 	public static int getDelayTicks(int delay, Function<ScaleData, Float> targetSupplier, ScaleData scaleData)
 	{
-		if (Float.compare(scaleData.getScale(), scaleData.getTargetScale()) != 0)
+		if (isResizing(scaleData))
 		{
 			final float target = targetSupplier.apply(scaleData);
 			final float distance = scaleData.getInitialScale() - target;
-			final float remaining = scaleData.getScale() - target;
+			final float remaining = scaleData.getBaseScale() - target;
 			
 			return (int) (Math.abs(remaining / distance) * delay);
 		}
