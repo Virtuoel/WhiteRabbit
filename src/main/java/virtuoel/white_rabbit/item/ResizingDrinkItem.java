@@ -35,6 +35,11 @@ public class ResizingDrinkItem extends ResizingItem
 	@Override
 	public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user)
 	{
+		if (!useCondition.test(ScaleTypeRegistrar.FOOD_TYPE.getScaleData(user)))
+		{
+			return stack;
+		}
+		
 		stack = super.finishUsing(stack, world, user);
 		
 		if (user instanceof ServerPlayerEntity)

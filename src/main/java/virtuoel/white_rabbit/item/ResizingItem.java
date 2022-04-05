@@ -34,6 +34,11 @@ public class ResizingItem extends Item
 	@Override
 	public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user)
 	{
+		if (!useCondition.test(ScaleTypeRegistrar.FOOD_TYPE.getScaleData(user)))
+		{
+			return stack;
+		}
+		
 		stack = super.finishUsing(stack, world, user);
 		
 		if (!world.isClient)
@@ -53,7 +58,8 @@ public class ResizingItem extends Item
 			
 			if (effectDuration > 0)
 			{
-				user.addStatusEffect(new StatusEffectInstance(StatusEffectRegistrar.RESIZING, delay + effectDuration));
+				user.removeStatusEffectInternal(StatusEffectRegistrar.RESIZING);
+				user.addStatusEffect(new StatusEffectInstance(StatusEffectRegistrar.RESIZING, delay + effectDuration, 0, false, false, true));
 			}
 		}
 		

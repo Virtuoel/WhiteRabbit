@@ -84,7 +84,8 @@ public class WhiteRabbit implements ModInitializer
 							
 							if (effectDuration > 0)
 							{
-								e.addStatusEffect(new StatusEffectInstance(StatusEffectRegistrar.RESIZING, delay + effectDuration));
+								e.removeStatusEffectInternal(StatusEffectRegistrar.RESIZING);
+								e.addStatusEffect(new StatusEffectInstance(StatusEffectRegistrar.RESIZING, delay + effectDuration, 0, false, false, true));
 							}
 						}
 						
@@ -156,7 +157,8 @@ public class WhiteRabbit implements ModInitializer
 							
 							if (effectDuration > 0)
 							{
-								e.addStatusEffect(new StatusEffectInstance(StatusEffectRegistrar.RESIZING, delay + effectDuration));
+								e.removeStatusEffectInternal(StatusEffectRegistrar.RESIZING);
+								e.addStatusEffect(new StatusEffectInstance(StatusEffectRegistrar.RESIZING, delay + effectDuration, 0, false, false, true));
 							}
 						}
 						
