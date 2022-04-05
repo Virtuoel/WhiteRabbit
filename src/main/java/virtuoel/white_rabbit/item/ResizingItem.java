@@ -4,6 +4,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -12,7 +13,9 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import virtuoel.pehkui.api.ScaleData;
+import virtuoel.white_rabbit.api.WhiteRabbitConfig;
 import virtuoel.white_rabbit.init.ScaleTypeRegistrar;
+import virtuoel.white_rabbit.init.StatusEffectRegistrar;
 
 public class ResizingItem extends Item
 {
@@ -45,6 +48,13 @@ public class ResizingItem extends Item
 			}
 			
 			scaleData.setTargetScale(targetScale.apply(scaleData));
+			
+			final int effectDuration = WhiteRabbitConfig.COMMON.resizingEffectDuration.get();
+			
+			if (effectDuration > 0)
+			{
+				user.addStatusEffect(new StatusEffectInstance(StatusEffectRegistrar.RESIZING, delay + effectDuration));
+			}
 		}
 		
 		return stack;

@@ -13,6 +13,8 @@ import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.DispenserBlockEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
@@ -23,6 +25,7 @@ import virtuoel.pehkui.api.ScaleData;
 import virtuoel.white_rabbit.api.WhiteRabbitConfig;
 import virtuoel.white_rabbit.init.ItemRegistrar;
 import virtuoel.white_rabbit.init.ScaleTypeRegistrar;
+import virtuoel.white_rabbit.init.StatusEffectRegistrar;
 import virtuoel.white_rabbit.mixin.DispenserBlockAccessor;
 import virtuoel.white_rabbit.mixin.FallibleItemDispenserBehaviorAccessor;
 
@@ -42,6 +45,7 @@ public class WhiteRabbit implements ModInitializer
 	{
 		ItemRegistrar.INSTANCE.getClass();
 		ScaleTypeRegistrar.INSTANCE.getClass();
+		StatusEffectRegistrar.INSTANCE.getClass();
 		
 		DispenserBlock.registerBehavior(ItemRegistrar.PISHSALVER, new FallibleItemDispenserBehavior()
 		{
@@ -71,6 +75,19 @@ public class WhiteRabbit implements ModInitializer
 						}
 						
 						scaleData.setTargetScale(getShrinkTargetScale(scaleData));
+						
+						if (target instanceof LivingEntity)
+						{
+							final LivingEntity e = (LivingEntity) target;
+							
+							final int effectDuration = WhiteRabbitConfig.COMMON.resizingEffectDuration.get();
+							
+							if (effectDuration > 0)
+							{
+								e.addStatusEffect(new StatusEffectInstance(StatusEffectRegistrar.RESIZING, delay + effectDuration));
+							}
+						}
+						
 						success = true;
 					}
 					
@@ -130,6 +147,19 @@ public class WhiteRabbit implements ModInitializer
 						}
 						
 						scaleData.setTargetScale(getGrowthTargetScale(scaleData));
+						
+						if (target instanceof LivingEntity)
+						{
+							final LivingEntity e = (LivingEntity) target;
+							
+							final int effectDuration = WhiteRabbitConfig.COMMON.resizingEffectDuration.get();
+							
+							if (effectDuration > 0)
+							{
+								e.addStatusEffect(new StatusEffectInstance(StatusEffectRegistrar.RESIZING, delay + effectDuration));
+							}
+						}
+						
 						success = true;
 					}
 					

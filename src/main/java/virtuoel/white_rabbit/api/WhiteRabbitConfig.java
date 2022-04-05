@@ -38,6 +38,7 @@ public class WhiteRabbitConfig
 		public final Supplier<Double> growthMultiplier;
 		public final Supplier<Integer> shrinkDelayTicks;
 		public final Supplier<Integer> growthDelayTicks;
+		public final Supplier<Integer> resizingEffectDuration;
 		
 		private Common(final JsonConfigBuilder builder)
 		{
@@ -46,8 +47,9 @@ public class WhiteRabbitConfig
 			this.maxScale = builder.doubleConfig("maxScale", 16.0D);
 			this.shrinkMultiplier = builder.doubleConfig("shrinkMultiplier", 0.5D);
 			this.growthMultiplier = builder.doubleConfig("growthMultiplier", 2.0D);
-			this.shrinkDelayTicks = builder.numberConfig("shrinkDelayTicks", Number::intValue, 100);
-			this.growthDelayTicks = builder.numberConfig("growthDelayTicks", Number::intValue, 100);
+			this.shrinkDelayTicks = builder.intConfig("shrinkDelayTicks", 100);
+			this.growthDelayTicks = builder.intConfig("growthDelayTicks", 100);
+			this.resizingEffectDuration = builder.intConfig("resizingEffectDuration", 0);
 		}
 	}
 	
