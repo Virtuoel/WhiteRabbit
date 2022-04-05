@@ -49,7 +49,7 @@ public class WhiteRabbitConfig
 			this.growthMultiplier = builder.doubleConfig("growthMultiplier", 2.0D);
 			this.shrinkDelayTicks = builder.intConfig("shrinkDelayTicks", 100);
 			this.growthDelayTicks = builder.intConfig("growthDelayTicks", 100);
-			this.resizingEffectDuration = builder.intConfig("resizingEffectDuration", 0);
+			this.resizingEffectDuration = builder.intConfig("resizingEffectDuration", 20 * 60 * 25);
 		}
 	}
 	
