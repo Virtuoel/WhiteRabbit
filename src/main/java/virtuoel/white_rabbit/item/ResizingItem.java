@@ -18,9 +18,11 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import virtuoel.pehkui.api.ScaleData;
+import virtuoel.pehkui.util.I18nUtils;
 import virtuoel.white_rabbit.api.WhiteRabbitConfig;
 import virtuoel.white_rabbit.init.ScaleTypeRegistrar;
 import virtuoel.white_rabbit.init.StatusEffectRegistrar;
+import virtuoel.white_rabbit.util.ReflectionUtils;
 
 public class ResizingItem extends Item
 {
@@ -40,7 +42,7 @@ public class ResizingItem extends Item
 	public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context)
 	{
 		super.appendTooltip(stack, world, tooltip, context);
-		tooltip.add(new TranslatableText(getTranslationKey() + ".tooltip").formatted(Formatting.GRAY));
+		tooltip.add(ReflectionUtils.formatted(new TranslatableText(getTranslationKey() + ".tooltip", I18nUtils.EMPTY_VARARGS), Formatting.GRAY));
 	}
 	
 	@Override

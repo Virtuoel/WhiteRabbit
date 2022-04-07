@@ -28,6 +28,7 @@ import virtuoel.white_rabbit.init.ScaleTypeRegistrar;
 import virtuoel.white_rabbit.init.StatusEffectRegistrar;
 import virtuoel.white_rabbit.mixin.DispenserBlockAccessor;
 import virtuoel.white_rabbit.mixin.FallibleItemDispenserBehaviorAccessor;
+import virtuoel.white_rabbit.util.ReflectionUtils;
 
 public class WhiteRabbit implements ModInitializer
 {
@@ -43,6 +44,8 @@ public class WhiteRabbit implements ModInitializer
 	@Override
 	public void onInitialize()
 	{
+		ReflectionUtils.init();
+		
 		ItemRegistrar.INSTANCE.getClass();
 		ScaleTypeRegistrar.INSTANCE.getClass();
 		StatusEffectRegistrar.INSTANCE.getClass();
