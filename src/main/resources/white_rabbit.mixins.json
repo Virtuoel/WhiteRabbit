@@ -3,6 +3,7 @@
 	"minVersion": "0.8",
 	"package": "virtuoel.white_rabbit.mixin",
 	"compatibilityLevel": "JAVA_8",
+	"refmap": "WhiteRabbit-refmap.json",
 	"mixins":
 	[
 		"DispenserBlockAccessor",

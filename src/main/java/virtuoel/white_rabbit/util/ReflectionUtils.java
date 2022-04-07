@@ -57,10 +57,10 @@ public class ReflectionUtils
 			}
 			h.put(1, lookup.unreflect(m));
 		}
-		catch (NoSuchMethodException | SecurityException | IllegalAccessException e1)
+		catch (NoSuchMethodException | SecurityException | IllegalAccessException e)
 		{
 			WhiteRabbit.LOGGER.error("Last method lookup: {}", mapped);
-			WhiteRabbit.LOGGER.catching(e1);
+			WhiteRabbit.LOGGER.catching(e);
 		}
 		
 		FORMATTED = h.get(0);
