@@ -3,13 +3,15 @@
 	"minVersion": "0.8",
 	"package": "virtuoel.white_rabbit.mixin",
 	"compatibilityLevel": "JAVA_8",
+	"plugin": "virtuoel.white_rabbit.mixin.WhiteRabbitMixinConfigPlugin",
 	"refmap": "WhiteRabbit-refmap.json",
 	"mixins":
 	[
 		"DispenserBlockAccessor",
 		"FallibleItemDispenserBehaviorAccessor",
 		"ItemDispenserBehaviorInvoker",
-		"PlayerEntityAccessor"
+		"PlayerEntityAccessor",
+		"compat115minus.StatusEffectMixin"
 	],
 	"client":
 	[
