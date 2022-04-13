@@ -74,7 +74,7 @@ public class ResizingItem extends Item
 			if (effectDuration > 0)
 			{
 				user.removeStatusEffectInternal(StatusEffectRegistrar.RESIZING);
-				user.addStatusEffect(new StatusEffectInstance(StatusEffectRegistrar.RESIZING, delay + effectDuration, 0, false, false, true));
+				user.addStatusEffect(new StatusEffectInstance(StatusEffectRegistrar.RESIZING, delay + effectDuration, 0, false, false, false));
 			}
 			else
 			{
