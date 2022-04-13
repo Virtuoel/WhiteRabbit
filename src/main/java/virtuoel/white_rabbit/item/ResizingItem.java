@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import virtuoel.pehkui.api.ScaleData;
 import virtuoel.pehkui.util.I18nUtils;
 import virtuoel.white_rabbit.api.WhiteRabbitConfig;
+import virtuoel.white_rabbit.entity.effect.ResizingStatusEffect;
 import virtuoel.white_rabbit.init.ScaleTypeRegistrar;
 import virtuoel.white_rabbit.init.StatusEffectRegistrar;
 import virtuoel.white_rabbit.util.ReflectionUtils;
@@ -74,6 +75,10 @@ public class ResizingItem extends Item
 			{
 				user.removeStatusEffectInternal(StatusEffectRegistrar.RESIZING);
 				user.addStatusEffect(new StatusEffectInstance(StatusEffectRegistrar.RESIZING, delay + effectDuration, 0, false, false, true));
+			}
+			else
+			{
+				ResizingStatusEffect.playApplicationSound(user);
 			}
 		}
 		

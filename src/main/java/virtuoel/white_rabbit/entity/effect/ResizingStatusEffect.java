@@ -52,6 +52,11 @@ public class ResizingStatusEffect extends StatusEffect
 	
 	public static void doApplication(LivingEntity entity)
 	{
+		playApplicationSound(entity);
+	}
+	
+	public static void playApplicationSound(LivingEntity entity)
+	{
 		final Vec3d pos = entity.getPos();
 		
 		if (!entity.isSilent())
@@ -70,17 +75,22 @@ public class ResizingStatusEffect extends StatusEffect
 	
 	public static void doRemoval(LivingEntity entity)
 	{
-		final Vec3d pos = entity.getPos();
-		
-		if (!entity.isSilent())
-		{
-			ReflectionUtils.playSound(entity.world, null, pos.x, pos.y, pos.z, SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, entity.getSoundCategory(), 1.0F, 1.0F);
-		}
+		playRemovalSound(entity);
 		
 		final ScaleType type = ScaleTypeRegistrar.FOOD_TYPE;
 		
 		final float defaultScale = type.getDefaultBaseScale();
 		
 		type.getScaleData(entity).setTargetScale(defaultScale);
+	}
+	
+	public static void playRemovalSound(LivingEntity entity)
+	{
+		final Vec3d pos = entity.getPos();
+		
+		if (!entity.isSilent())
+		{
+			ReflectionUtils.playSound(entity.world, null, pos.x, pos.y, pos.z, SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, entity.getSoundCategory(), 1.0F, 1.0F);
+		}
 	}
 }

@@ -23,6 +23,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import virtuoel.pehkui.api.ScaleData;
 import virtuoel.white_rabbit.api.WhiteRabbitConfig;
+import virtuoel.white_rabbit.entity.effect.ResizingStatusEffect;
 import virtuoel.white_rabbit.init.ItemRegistrar;
 import virtuoel.white_rabbit.init.ScaleTypeRegistrar;
 import virtuoel.white_rabbit.init.StatusEffectRegistrar;
@@ -89,6 +90,10 @@ public class WhiteRabbit implements ModInitializer
 							{
 								e.removeStatusEffectInternal(StatusEffectRegistrar.RESIZING);
 								e.addStatusEffect(new StatusEffectInstance(StatusEffectRegistrar.RESIZING, delay + effectDuration, 0, false, false, true));
+							}
+							else
+							{
+								ResizingStatusEffect.playApplicationSound(e);
 							}
 						}
 						
@@ -162,6 +167,10 @@ public class WhiteRabbit implements ModInitializer
 							{
 								e.removeStatusEffectInternal(StatusEffectRegistrar.RESIZING);
 								e.addStatusEffect(new StatusEffectInstance(StatusEffectRegistrar.RESIZING, delay + effectDuration, 0, false, false, true));
+							}
+							else
+							{
+								ResizingStatusEffect.playApplicationSound(e);
 							}
 						}
 						
