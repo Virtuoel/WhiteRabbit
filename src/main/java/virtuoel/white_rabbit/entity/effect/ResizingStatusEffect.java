@@ -50,7 +50,7 @@ public class ResizingStatusEffect extends StatusEffect
 		doApplication(entity);
 	}
 	
-	public void doApplication(LivingEntity entity)
+	public static void doApplication(LivingEntity entity)
 	{
 		final Vec3d pos = entity.getPos();
 		
@@ -68,7 +68,7 @@ public class ResizingStatusEffect extends StatusEffect
 		doRemoval(entity);
 	}
 	
-	public void doRemoval(LivingEntity entity)
+	public static void doRemoval(LivingEntity entity)
 	{
 		final Vec3d pos = entity.getPos();
 		
