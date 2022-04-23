@@ -14,7 +14,7 @@ import net.fabricmc.loader.api.MappingResolver;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.text.BaseText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
@@ -67,7 +67,7 @@ public class ReflectionUtils
 		PLAY_SOUND = h.get(1);
 	}
 	
-	public static Text formatted(BaseText input, Formatting... formatting)
+	public static Text formatted(Object input, Formatting... formatting)
 	{
 		if (FORMATTED != null)
 		{
@@ -77,11 +77,11 @@ public class ReflectionUtils
 			}
 			catch (Throwable e)
 			{
-				return input;
+				return (Text) input;
 			}
 		}
 		
-		return (Text) input.formatted(formatting);
+		return (Text) ((MutableText) input).formatted(formatting);
 	}
 	
 	public static void playSound(World world, @Nullable PlayerEntity except, double x, double y, double z, SoundEvent sound, SoundCategory category, float volume, float pitch)

@@ -11,7 +11,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
@@ -43,7 +42,7 @@ public class ResizingItem extends Item
 	public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context)
 	{
 		super.appendTooltip(stack, world, tooltip, context);
-		tooltip.add(ReflectionUtils.formatted(new TranslatableText(getTranslationKey() + ".tooltip", I18nUtils.EMPTY_VARARGS), Formatting.GRAY));
+		tooltip.add(ReflectionUtils.formatted(I18nUtils.translate(getTranslationKey() + ".tooltip", "Consume Me!"), Formatting.GRAY));
 	}
 	
 	@Override
