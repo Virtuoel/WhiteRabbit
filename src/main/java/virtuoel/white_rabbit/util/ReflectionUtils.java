@@ -43,8 +43,13 @@ public class ReflectionUtils
 			{
 				mapped = mappingResolver.mapMethodName("intermediary", "net.minecraft.class_2561", "method_10856", "([Lnet/minecraft/class_124;)Lnet/minecraft/class_2561;");
 				m = Text.class.getMethod(mapped, Formatting[].class);
-				h.put(0, lookup.unreflect(m));
 			}
+			else
+			{
+				mapped = mappingResolver.mapMethodName("intermediary", "net.minecraft.class_5250", "method_27695", "([Lnet/minecraft/class_124;)Lnet/minecraft/class_5250;");
+				m = MutableText.class.getMethod(mapped, Formatting[].class);
+			}
+			h.put(0, lookup.unreflect(m));
 			
 			mapped = mappingResolver.mapMethodName("intermediary", "net.minecraft.class_1937", "method_8465", "(Lnet/minecraft/class_1657;DDDLnet/minecraft/class_3414;Lnet/minecraft/class_3419;FF" + (is118Minus ? ")V" : "J)V"));
 			if (is118Minus)
@@ -73,15 +78,22 @@ public class ReflectionUtils
 		{
 			try
 			{
-				return (Text) FORMATTED.invokeExact((Text) input, formatting);
+				if (VersionUtils.MINOR <= 15)
+				{
+					return (Text) FORMATTED.invokeExact((Text) input, formatting);
+				}
+				else
+				{
+					return (MutableText) FORMATTED.invokeExact((MutableText) input, formatting);
+				}
 			}
 			catch (Throwable e)
 			{
-				return (Text) input;
+				
 			}
 		}
 		
-		return (Text) ((MutableText) input).formatted(formatting);
+		return (Text) input;
 	}
 	
 	public static void playSound(World world, @Nullable PlayerEntity except, double x, double y, double z, SoundEvent sound, SoundCategory category, float volume, float pitch)
