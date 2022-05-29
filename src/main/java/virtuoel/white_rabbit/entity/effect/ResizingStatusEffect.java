@@ -1,5 +1,6 @@
 package virtuoel.white_rabbit.entity.effect;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
@@ -50,12 +51,12 @@ public class ResizingStatusEffect extends StatusEffect
 		doApplication(entity);
 	}
 	
-	public static void doApplication(LivingEntity entity)
+	public static void doApplication(final Entity entity)
 	{
 		playApplicationSound(entity);
 	}
 	
-	public static void playApplicationSound(LivingEntity entity)
+	public static void playApplicationSound(final Entity entity)
 	{
 		final Vec3d pos = entity.getPos();
 		
@@ -73,7 +74,7 @@ public class ResizingStatusEffect extends StatusEffect
 		doRemoval(entity);
 	}
 	
-	public static void doRemoval(LivingEntity entity)
+	public static void doRemoval(final Entity entity)
 	{
 		playRemovalSound(entity);
 		
@@ -84,7 +85,7 @@ public class ResizingStatusEffect extends StatusEffect
 		type.getScaleData(entity).setTargetScale(defaultScale);
 	}
 	
-	public static void playRemovalSound(LivingEntity entity)
+	public static void playRemovalSound(final Entity entity)
 	{
 		final Vec3d pos = entity.getPos();
 		

@@ -93,8 +93,12 @@ public class WhiteRabbit implements ModInitializer
 							}
 							else
 							{
-								ResizingStatusEffect.playApplicationSound(e);
+								ResizingStatusEffect.playApplicationSound(target);
 							}
+						}
+						else
+						{
+							ResizingStatusEffect.playApplicationSound(target);
 						}
 						
 						success = true;
@@ -170,8 +174,12 @@ public class WhiteRabbit implements ModInitializer
 							}
 							else
 							{
-								ResizingStatusEffect.playApplicationSound(e);
+								ResizingStatusEffect.playApplicationSound(target);
 							}
+						}
+						else
+						{
+							ResizingStatusEffect.playApplicationSound(target);
 						}
 						
 						success = true;
