@@ -20,7 +20,7 @@
 	"depends":
 	{
 		"fabricloader": ">=0.14.8",
-		"pehkui": ">=3.3.3",
+		"pehkui": ">=3.3.4",
 		"fabric-registry-sync-v0": "*",
 		"fabric-resource-loader-v0": "*"
 	},
