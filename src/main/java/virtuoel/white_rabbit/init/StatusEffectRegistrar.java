@@ -2,9 +2,9 @@ package virtuoel.white_rabbit.init;
 
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.util.registry.Registry;
 import virtuoel.white_rabbit.WhiteRabbit;
 import virtuoel.white_rabbit.entity.effect.ResizingStatusEffect;
+import virtuoel.white_rabbit.util.ReflectionUtils;
 
 public class StatusEffectRegistrar
 {
@@ -12,7 +12,7 @@ public class StatusEffectRegistrar
 	
 	private static StatusEffect register(String name, StatusEffect entry)
 	{
-		return Registry.register(Registry.STATUS_EFFECT, WhiteRabbit.id(name), entry);
+		return ReflectionUtils.register(ReflectionUtils.STATUS_EFFECT_REGISTRY, WhiteRabbit.id(name), entry);
 	}
 	
 	public static final StatusEffectRegistrar INSTANCE = new StatusEffectRegistrar();

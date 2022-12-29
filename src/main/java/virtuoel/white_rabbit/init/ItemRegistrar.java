@@ -1,16 +1,16 @@
 package virtuoel.white_rabbit.init;
 
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
-import net.fabricmc.loader.api.FabricLoader;
+import java.util.stream.Stream;
+
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.util.registry.Registry;
 import virtuoel.white_rabbit.WhiteRabbit;
 import virtuoel.white_rabbit.item.ResizingDrinkItem;
 import virtuoel.white_rabbit.item.ResizingItem;
+import virtuoel.white_rabbit.util.ReflectionUtils;
 
 public final class ItemRegistrar
 {
@@ -29,12 +29,28 @@ public final class ItemRegistrar
 			.build();
 	}
 	
-	public static final ItemGroup ITEM_GROUP = !FabricLoader.getInstance().isModLoaded("fabric-item-groups-v0") ? null : FabricItemGroupBuilder.build(WhiteRabbit.id("item_group"), () -> new ItemStack(ItemRegistrar.PISHSALVER));
+	public static final ItemGroup ITEM_GROUP = ReflectionUtils.buildItemGroup(
+		WhiteRabbit.id("general"),
+		() -> new ItemStack(ItemRegistrar.UPELKUCHEN),
+		() -> Stream.of(
+				ItemRegistrar.PISHSALVER,
+				ItemRegistrar.UPELKUCHEN
+			)
+	);
+	
+	public static Item.Settings commonItemSettings()
+	{
+		final Item.Settings settings = new Item.Settings();
+		
+		ReflectionUtils.setItemSettingsGroup(settings, ITEM_GROUP);
+		
+		return settings;
+	}
 	
 	public static final Item PISHSALVER = register(
 		"pishsalver",
 		new ResizingDrinkItem(
-			new Item.Settings().group(ITEM_GROUP).maxCount(16)
+			commonItemSettings().maxCount(16)
 			.food(WhiteRabbitFoodComponents.PISHSALVER),
 			WhiteRabbit::getShrinkTargetScale,
 			WhiteRabbit::getShrinkDelayTicks,
@@ -46,7 +62,7 @@ public final class ItemRegistrar
 	public static final Item UPELKUCHEN = register(
 		"upelkuchen",
 		new ResizingItem(
-			new Item.Settings().group(ITEM_GROUP).maxCount(16)
+			commonItemSettings().maxCount(16)
 			.food(WhiteRabbitFoodComponents.UPELKUCHEN),
 			WhiteRabbit::getGrowthTargetScale,
 			WhiteRabbit::getGrowthDelayTicks,
@@ -56,7 +72,7 @@ public final class ItemRegistrar
 	
 	public static Item register(String name, Item entry)
 	{
-		return Registry.register(Registry.ITEM, WhiteRabbit.id(name), entry);
+		return ReflectionUtils.register(ReflectionUtils.ITEM_REGISTRY, WhiteRabbit.id(name), entry);
 	}
 	
 	public static final ItemRegistrar INSTANCE = new ItemRegistrar();
