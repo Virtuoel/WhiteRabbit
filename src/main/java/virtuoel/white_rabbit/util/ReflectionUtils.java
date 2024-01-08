@@ -3,8 +3,11 @@ package virtuoel.white_rabbit.util;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodHandles.Lookup;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -15,26 +18,34 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.MappingResolver;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemGroup.DisplayContext;
+import net.minecraft.item.ItemGroup.Entries;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPointer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import virtuoel.pehkui.util.VersionUtils;
 import virtuoel.white_rabbit.WhiteRabbit;
 
 public class ReflectionUtils
 {
-	public static final MethodHandle FORMATTED, PLAY_SOUND, GROUP, BUILD, REGISTER;
+	public static final MethodHandle FORMATTED, PLAY_SOUND, GROUP, BUILD, REGISTER, GET_BLOCK_STATE, GET_BLOCK_ENTITY, GET_BLOCK_POS;
 	public static final Registry<Item> ITEM_REGISTRY;
 	public static final Registry<StatusEffect> STATUS_EFFECT_REGISTRY;
 	
@@ -55,6 +66,7 @@ public class ReflectionUtils
 			final boolean is115Minus = VersionUtils.MINOR <= 15;
 			final boolean is118Minus = VersionUtils.MINOR <= 18;
 			final boolean is1192Minus = VersionUtils.MINOR < 19 || (VersionUtils.MINOR == 19 && VersionUtils.PATCH <= 2);
+			final boolean is1201Minus = VersionUtils.MINOR < 20 || (VersionUtils.MINOR == 20 && VersionUtils.PATCH <= 1);
 			
 			if (is115Minus)
 			{
@@ -112,6 +124,21 @@ public class ReflectionUtils
 			mapped = mappingResolver.mapFieldName("intermediary", registrar, "field_" + (is1192Minus ? "11159" : "41174"), "Lnet/minecraft/class_2378;");
 			f = clazz.getField(mapped);
 			rS = f.get(null);
+			
+			if (is1201Minus)
+			{
+				mapped = mappingResolver.mapMethodName("intermediary", "net.minecraft.class_2342", "method_10120", "()Lnet/minecraft/class_2680;");
+				m = BlockPointer.class.getMethod(mapped);
+				h.put(5, lookup.unreflect(m));
+				
+				mapped = mappingResolver.mapMethodName("intermediary", "net.minecraft.class_2342", "method_10121", "()Lnet/minecraft/class_2586;");
+				m = BlockPointer.class.getMethod(mapped);
+				h.put(6, lookup.unreflect(m));
+				
+				mapped = mappingResolver.mapMethodName("intermediary", "net.minecraft.class_2342", "method_10122", "()Lnet/minecraft/class_2338;");
+				m = BlockPointer.class.getMethod(mapped);
+				h.put(7, lookup.unreflect(m));
+			}
 		}
 		catch (NoSuchMethodException | SecurityException | IllegalAccessException | ClassNotFoundException | NoSuchFieldException e)
 		{
@@ -124,6 +151,9 @@ public class ReflectionUtils
 		GROUP = h.get(2);
 		BUILD = h.get(3);
 		REGISTER = h.get(4);
+		GET_BLOCK_STATE = h.get(5);
+		GET_BLOCK_ENTITY = h.get(6);
+		GET_BLOCK_POS = h.get(7);
 		ITEM_REGISTRY = castRegistry(rI);
 		STATUS_EFFECT_REGISTRY = castRegistry(rS);
 	}
@@ -180,6 +210,57 @@ public class ReflectionUtils
 		}
 	}
 	
+	public static BlockState getBlockState(final BlockPointer pointer)
+	{
+		if (GET_BLOCK_STATE != null)
+		{
+			try
+			{
+				return (BlockState) GET_BLOCK_STATE.invoke(pointer);
+			}
+			catch (Throwable e)
+			{
+				throw new RuntimeException(e);
+			}
+		}
+		
+		return pointer.state();
+	}
+	
+	public static BlockEntity getBlockEntity(final BlockPointer pointer)
+	{
+		if (GET_BLOCK_ENTITY != null)
+		{
+			try
+			{
+				return (BlockEntity) GET_BLOCK_ENTITY.invoke(pointer);
+			}
+			catch (Throwable e)
+			{
+				throw new RuntimeException(e);
+			}
+		}
+		
+		return pointer.blockEntity();
+	}
+	
+	public static BlockPos getBlockPos(final BlockPointer pointer)
+	{
+		if (GET_BLOCK_POS != null)
+		{
+			try
+			{
+				return (BlockPos) GET_BLOCK_POS.invoke(pointer);
+			}
+			catch (Throwable e)
+			{
+				throw new RuntimeException(e);
+			}
+		}
+		
+		return pointer.pos();
+	}
+	
 	public static void setItemSettingsGroup(Item.Settings settings, ItemGroup group)
 	{
 		if (GROUP != null)
@@ -209,18 +290,64 @@ public class ReflectionUtils
 			}
 		}
 		
-		if (FabricLoader.getInstance().isModLoaded("fabric-item-group-api-v1"))
+		final Supplier<ItemGroup.Builder> builder;
+		
+		if (VersionUtils.MINOR == 19 && VersionUtils.PATCH >= 3)
 		{
-			return FabricItemGroup.builder(id)
-				.icon(icon)
-				.entries((enabledFeatures, entries, operatorEnabled) ->
-				{
-					items.get().forEach(entries::add);
-				})
-				.build();
+			try
+			{
+				final Method m = FabricItemGroup.class.getMethod("builder", Identifier.class);
+				builder = () -> {
+					try
+					{
+						return (ItemGroup.Builder) m.invoke(null, id);
+					}
+					catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+					{
+						throw new RuntimeException(e);
+					}
+				};
+			}
+			catch (NoSuchMethodException | SecurityException e)
+			{
+				throw new RuntimeException(e);
+			}
+		}
+		else
+		{
+			builder = () -> FabricItemGroup.builder()
+				.displayName(Text.translatable("itemGroup." + WhiteRabbit.MOD_ID + ".general"));
 		}
 		
-		return null;
+		final ItemGroup group = Classloading1193Plus.addEntries(builder.get().icon(icon), items).build();
+		
+		if (VersionUtils.MINOR > 19)
+		{
+			return Registry.register(Registries.ITEM_GROUP, id, group);
+		}
+		
+		return group;
+	}
+	
+	public static final class Classloading1193Plus
+	{
+		public static ItemGroup.Builder addEntries(ItemGroup.Builder builder, Supplier<Stream<ItemConvertible>> items)
+		{
+			return builder.entries(new ItemGroup.EntryCollector()
+			{
+				@Override
+				public void accept(DisplayContext displayContext, Entries entries)
+				{
+					items.get().forEach(entries::add);
+				}
+				
+				@SuppressWarnings("unused")
+				public void accept(FeatureSet enabledFeatures, Entries entries, boolean operatorEnabled)
+				{
+					items.get().forEach(entries::add);
+				}
+			});
+		}
 	}
 	
 	public static <V, T extends V> T register(Registry<V> registry, Identifier id, T entry)
@@ -233,6 +360,103 @@ public class ReflectionUtils
 		{
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public static Optional<Field> getField(final Optional<Class<?>> classObj, final String fieldName)
+	{
+		return classObj.map(c ->
+		{
+			try
+			{
+				final Field f = c.getDeclaredField(fieldName);
+				f.setAccessible(true);
+				return f;
+			}
+			catch (SecurityException | NoSuchFieldException e)
+			{
+				
+			}
+			return null;
+		});
+	}
+	
+	public static void setField(final Optional<Class<?>> classObj, final String fieldName, Object object, Object value)
+	{
+		ReflectionUtils.getField(classObj, fieldName).ifPresent(f ->
+		{
+			try
+			{
+				f.set(object, value);
+			}
+			catch (IllegalArgumentException | IllegalAccessException e)
+			{
+				
+			}
+		});
+	}
+	
+	public static Optional<Method> getMethod(final Optional<Class<?>> classObj, final String methodName, Class<?>... args)
+	{
+		return classObj.map(c ->
+		{
+			try
+			{
+				final Method m = c.getMethod(methodName, args);
+				m.setAccessible(true);
+				return m;
+			}
+			catch (SecurityException | NoSuchMethodException e)
+			{
+				
+			}
+			return null;
+		});
+	}
+	
+	public static <T> Optional<Constructor<T>> getConstructor(final Optional<Class<T>> clazz, final Class<?>... params)
+	{
+		return clazz.map(c ->
+		{
+			try
+			{
+				return c.getConstructor(params);
+			}
+			catch (NoSuchMethodException | SecurityException e)
+			{
+				return null;
+			}
+		});
+	}
+	
+	public static Optional<Class<?>> getClass(final String className, final String... classNames)
+	{
+		Optional<Class<?>> ret = getClass(className);
+		
+		for (final String name : classNames)
+		{
+			if (ret.isPresent())
+			{
+				return ret;
+			}
+			
+			ret = getClass(name);
+		}
+		
+		return ret;
+	}
+	
+	public static Optional<Class<?>> getClass(final String className)
+	{
+		try
+		{
+			return Optional.of(Class.forName(className));
+		}
+		catch (ClassNotFoundException e)
+		{
+			
+		}
+		
+		return Optional.empty();
 	}
 	
 	private ReflectionUtils()

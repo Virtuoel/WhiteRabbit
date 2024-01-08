@@ -29,6 +29,7 @@ import virtuoel.white_rabbit.init.ScaleTypeRegistrar;
 import virtuoel.white_rabbit.init.StatusEffectRegistrar;
 import virtuoel.white_rabbit.mixin.DispenserBlockAccessor;
 import virtuoel.white_rabbit.mixin.FallibleItemDispenserBehaviorAccessor;
+import virtuoel.white_rabbit.util.ReflectionUtils;
 
 public class WhiteRabbit implements ModInitializer
 {
@@ -55,8 +56,8 @@ public class WhiteRabbit implements ModInitializer
 			@Override
 			protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack)
 			{
-				final BlockEntity blockEntity = pointer.getBlockEntity();
-				final BlockPos pos = pointer.getPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
+				final BlockEntity blockEntity = ReflectionUtils.getBlockEntity(pointer);
+				final BlockPos pos = ReflectionUtils.getBlockPos(pointer).offset(ReflectionUtils.getBlockState(pointer).get(DispenserBlock.FACING));
 				final List<Entity> entities = blockEntity.getWorld().getOtherEntities(null, new Box(pos));
 				
 				((FallibleItemDispenserBehaviorAccessor) (Object) this).setSuccess(false);
@@ -137,8 +138,8 @@ public class WhiteRabbit implements ModInitializer
 			@Override
 			protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack)
 			{
-				final BlockPos pos = pointer.getPos().offset(pointer.getBlockState().get(DispenserBlock.FACING));
-				final List<Entity> entities = pointer.getBlockEntity().getWorld().getOtherEntities(null, new Box(pos));
+				final BlockPos pos = ReflectionUtils.getBlockPos(pointer).offset(ReflectionUtils.getBlockState(pointer).get(DispenserBlock.FACING));
+				final List<Entity> entities = ReflectionUtils.getBlockEntity(pointer).getWorld().getOtherEntities(null, new Box(pos));
 				
 				((FallibleItemDispenserBehaviorAccessor) (Object) this).setSuccess(false);
 				

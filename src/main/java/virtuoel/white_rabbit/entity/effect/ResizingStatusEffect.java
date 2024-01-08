@@ -2,11 +2,11 @@ package virtuoel.white_rabbit.entity.effect;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import virtuoel.pehkui.api.ScaleData;
 import virtuoel.pehkui.api.ScaleType;
 import virtuoel.white_rabbit.init.ScaleTypeRegistrar;
@@ -22,7 +22,8 @@ public class ResizingStatusEffect extends StatusEffect
 	@Override
 	public void applyUpdateEffect(LivingEntity entity, int amplifier)
 	{
-		if (entity.world.isClient)
+		final World world = entity.getEntityWorld();
+		if (world.isClient)
 		{
 			return;
 		}
@@ -43,14 +44,6 @@ public class ResizingStatusEffect extends StatusEffect
 		return duration % 20 == 0;
 	}
 	
-	@Override
-	public void onApplied(LivingEntity entity, AttributeContainer attributes, int amplifier)
-	{
-		super.onApplied(entity, attributes, amplifier);
-		
-		doApplication(entity);
-	}
-	
 	public static void doApplication(final Entity entity)
 	{
 		playApplicationSound(entity);
@@ -62,16 +55,8 @@ public class ResizingStatusEffect extends StatusEffect
 		
 		if (!entity.isSilent())
 		{
-			ReflectionUtils.playSound(entity.world, null, pos.x, pos.y, pos.z, SoundEvents.ENTITY_EVOKER_CAST_SPELL, entity.getSoundCategory(), 1.0F, 1.0F);
+			ReflectionUtils.playSound(entity.getEntityWorld(), null, pos.x, pos.y, pos.z, SoundEvents.ENTITY_EVOKER_CAST_SPELL, entity.getSoundCategory(), 1.0F, 1.0F);
 		}
-	}
-	
-	@Override
-	public void onRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier)
-	{
-		super.onRemoved(entity, attributes, amplifier);
-		
-		doRemoval(entity);
 	}
 	
 	public static void doRemoval(final Entity entity)
@@ -91,7 +76,7 @@ public class ResizingStatusEffect extends StatusEffect
 		
 		if (!entity.isSilent())
 		{
-			ReflectionUtils.playSound(entity.world, null, pos.x, pos.y, pos.z, SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, entity.getSoundCategory(), 1.0F, 1.0F);
+			ReflectionUtils.playSound(entity.getEntityWorld(), null, pos.x, pos.y, pos.z, SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, entity.getSoundCategory(), 1.0F, 1.0F);
 		}
 	}
 }

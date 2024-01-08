@@ -11,7 +11,8 @@
 		"FallibleItemDispenserBehaviorAccessor",
 		"ItemDispenserBehaviorInvoker",
 		"PlayerEntityAccessor",
-		"compat115minus.StatusEffectMixin"
+		"compat1201minus.StatusEffectMixin",
+		"compat1202plus.LivingEntityMixin"
 	],
 	"client":
 	[

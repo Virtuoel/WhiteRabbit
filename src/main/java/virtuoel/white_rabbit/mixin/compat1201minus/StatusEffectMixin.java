@@ -1,4 +1,4 @@
-package virtuoel.white_rabbit.mixin.compat115minus;
+package virtuoel.white_rabbit.mixin.compat1201minus;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,7 +16,7 @@ import virtuoel.white_rabbit.util.MixinConstants;
 public class StatusEffectMixin
 {
 	@Inject(at = @At("HEAD"), method = MixinConstants.ON_APPLIED, remap = false)
-	private void onOnApplied(LivingEntity entity, @Coerce Object attributes, int amplifier, CallbackInfo info)
+	private void white_rabbit$onApplied(LivingEntity entity, @Coerce Object attributes, int amplifier, CallbackInfo info)
 	{
 		if ((Object) this == StatusEffectRegistrar.RESIZING)
 		{
@@ -25,7 +25,7 @@ public class StatusEffectMixin
 	}
 	
 	@Inject(at = @At("HEAD"), method = MixinConstants.ON_REMOVED, remap = false)
-	private void onOnRemoved(LivingEntity entity, @Coerce Object attributes, int amplifier, CallbackInfo info)
+	private void white_rabbit$onRemoved(LivingEntity entity, @Coerce Object attributes, int amplifier, CallbackInfo info)
 	{
 		if ((Object) this == StatusEffectRegistrar.RESIZING)
 		{

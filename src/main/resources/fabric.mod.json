@@ -10,7 +10,7 @@
 	],
 	"contact":
 	{
-		"homepage": "https://www.curseforge.com/minecraft/mc-mods/white-rabbit",
+		"homepage": "https://modrinth.com/mod/white_rabbit",
 		"issues": "https://github.com/Virtuoel/WhiteRabbit/issues",
 		"sources": "https://github.com/Virtuoel/WhiteRabbit"
 	},
@@ -19,8 +19,8 @@
 	"environment": "*",
 	"depends":
 	{
-		"fabricloader": ">=0.14.11",
-		"pehkui": ">=3.6.2",
+		"fabricloader": ">=0.14.24",
+		"pehkui": ">=3.7.12",
 		"fabric-registry-sync-v0": "*",
 		"fabric-resource-loader-v0": "*"
 	},
