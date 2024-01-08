@@ -6,6 +6,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 import com.google.gson.JsonObject;
 
+import net.fabricmc.loader.api.FabricLoader;
 import virtuoel.kanos_config.api.JsonConfigBuilder;
 import virtuoel.white_rabbit.WhiteRabbit;
 
@@ -14,7 +15,7 @@ public class WhiteRabbitConfig
 	@ApiStatus.Internal
 	public static final JsonConfigBuilder BUILDER = new JsonConfigBuilder(
 		WhiteRabbit.MOD_ID,
-		"config.json"
+		FabricLoader.getInstance().getConfigDir().resolve(WhiteRabbit.MOD_ID).resolve("config.json").normalize()
 	);
 	
 	public static final Client CLIENT = new Client(BUILDER);
