@@ -290,6 +290,11 @@ public class ReflectionUtils
 			}
 		}
 		
+		if (!FabricLoader.getInstance().isModLoaded("fabric-item-group-api-v1"))
+		{
+			return null;
+		}
+		
 		final Supplier<ItemGroup.Builder> builder;
 		
 		if (VersionUtils.MINOR == 19 && VersionUtils.PATCH >= 3)
